@@ -1,2 +1,5 @@
 #!/bin/bash
-git add . && git commit -m 'publishing' && scp -P 19216 -r _genSite scp1@192.168.1.100:http/
+git add . &&
+  git commit -m 'publishing' &&
+  git push origin master &&
+  scp -P 19216 -r _genSite scp1@192.168.1.100:http/
