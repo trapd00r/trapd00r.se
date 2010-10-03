@@ -9,7 +9,8 @@ p(publish_date). 03 October 2010
 
 h3. History
 
-p. In the beginning, there were 8 colors. Soon this was extended to 16, the added 8 was supposed to be either just the same colors with an added bold attribute, or 'bright' version of the first 8, depending on implementation. Known as the *ANSI colors*, those could be freely modified by loading X resources and respawning the terminal.
+p. In the beginning, there were 8 colors. Soon this was extended to 16, the added 8 was supposed to be either just the same colors with an added bold attribute, or 'bright' versions of the first 8, depending on implementation.
+Known as the *ANSI colors*, these could be freely modified by loading X resources and respawning the terminal.
 
 p. Along came rxvt-unicode that offered an amazing 88 colors.
 
