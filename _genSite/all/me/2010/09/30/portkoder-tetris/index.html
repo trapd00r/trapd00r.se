@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="semi">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> //
+      <a href="/os"   class="green">os(linux,unix)</a> ?
+      <a href="/code" class="orange">hacks(code)</a> :
+      <a href="/me"   class="blue">me(self)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2>Knäck portkoder med tetris</h2>
+<p class="publish_date">30 September 2010</p>
+<p>
+<p>I mitt arbete så kommer jag över en hel del portkoder.</p>
+</p>
+<p>Jag har noterat ett intressant mönster. På det nuvarande<br />
+arbetetet så bildar 88% av de portkoder som är i bruk <br />
+tetris-klossar.</p>
+<pre name="code" class="terminal">
+[1][2][3] 
+      [4] [3]
+          [6]
+[1][2]    [9]
+   [5][6] [0]
+</pre>
+<p>
+Naturligtvis så är detta medvetet. Alla vet hur tetrisklossar ser ut, och
+genom att visualisera koden på detta viset så blir de avsevärt lättare att
+komma ihåg &#8211; och knäcka.
+</p>
+<p>
+De annars 1048576 möjliga kombinationerna reduceras kraftigt till 16!
+</p>
+</div>
+
+
+<div id="related">
+  <h3>Possibly Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/perl/2010/05/18/expand-function-calls-in-a-string/">Expand function calls in a string</a></li>
+    
+      <li>&raquo; <a href="/all/os/2010/08/10/reset-high-speed-USB-device-using-ehci_hcd-Solution/">reset high speed USB device using ehci_hcd</a></li>
+    
+      <li>&raquo; <a href="/all/os/2010/06/04/GNU-Screen-hardstatus-fun/">GNU Screen hardstatus fun</a></li>
+    
+  </ul>
+</div>
+
+<!-- This is for code colorization which doesn't seem to work very well in IE... i guess I don't care very much -->
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shCore.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushRuby.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushPhp.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushXml.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushCss.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushBash.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushJScript.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.ClipboardSwf = 'http://communicatopia.s3.amazonaws.com/js/clipboard.swf';
+//name, showGutter, showControls, collapseAll, firstLine , showColumns
+dp.SyntaxHighlighter.HighlightAll('code',true, true,true,1,true);
+</script>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/firefox-remote">firefox-remote</a> ||
+    <a href="http://github.com/trapd00r/ttycolor">ttycolor</a> ||
+    <a href="http://github.com/trapd00r/rel">rel</a>
+
+    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a>
+
+  </div>
+</div>
+</body>

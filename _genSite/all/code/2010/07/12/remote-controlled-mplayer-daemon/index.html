@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="semi">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> //
+      <a href="/os"   class="green">os(linux,unix)</a> ?
+      <a href="/code" class="orange">hacks(code)</a> :
+      <a href="/me"   class="lightgreen">me(self)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2 id='remote_mplayer_clientdaemon'>Remote Mplayer Client/Daemon</h2>
+<h2 class='lightblue'>
+NAME
+</h2><p>
+<h4 class='pink'>
+  rmcd - remotely control a daemonized Mplayer process
+</h4>
+</p><h2 class='lightblue'>
+SYNOPSIS
+</h2>
+<pre><code>  rmcd [OPTION]... [FILE/URI]</code></pre>
+<h2 class='lightblue'>
+DESCRIPTION
+</h2>
+<pre><code>rmcd is a mplayer daemon/client - it daemonizes itself, playing
+music/movies/radio stations and waiting for input through the named
+pipe.
+
+You can send commands, load and play new content whenever you like.
+
+You can run rmcd on one computer and remotely control it on another,
+fully transparent. It only cares for the presence of the named pipe.
+
+You can also setup mplayer to stream the content to you, creating a
+solution similar to MPD and their builti-in httpd streaming (except MPD
+does not support video streaming).
+
+rmcd features a built-in, user configureable, webradio management
+system, functionality for copying the current track to your portable mp3
+player or wherever you prefer, favorizing of tracks and loading of the
+same, now playing information for both local files and streams, along
+other nifty stuff.</code></pre>
+<h2 class='lightblue'>
+OPTIONS
+</h2><pre class='terminal'>
+        -l,   --load       play FILE(s)/URI or radio station (see -list)
+        -ch,  --chanlist   list available radio channels
+        -cm,  --cmd        send COMMAND to a running process (see shortcuts)
+        -cl,  --clist      show a list of commands that are supported
+        -cp,  --copy       copy TRACK to DESTDIR
+        -i,   --info       show now playing information
+        -si   --shinfo     show now playing information on single line
+        -k,   --kill       kill the running process
+        -h,   --help       show the help
+        -m,   --man        show the manpage
+</pre><h3 class='lightblue'>
+  Shortcuts for often used commands
+</h3><pre class='terminal'>
+        -n    --next       next in playlist
+        -p    --prev       previous in playlist
+        -t,   --toggle     toggle playback
+        -s,   --stop       stop playback
+        -f    --fullscreen toggle fullscreen
+</pre><h2 class='lightblue'>
+ENVIRONMENT
+</h2>
+<p>The configuration file should be placed in <strong>$XDG_CONFIG_HOME/rmcd/rmcd.conf</strong></p>
+<h2 class='lightblue'>
+AUTHOR
+</h2>
+<p>Written by Magnus Woldrich.</p>
+<h2 class='lightblue'>
+REPORTING BUGS
+</h2>
+<p>Report bugs to trapd00r\@trapd00r.se or use the <a href='http://github.com/trapd00r/rmcd/issues'>issue tracker</a></p>
+<h2 class='lightblue'>
+COPYRIGHT
+</h2>
+<p>Copyright 2010 Magnus Woldrich.</p>
+
+<p>License GPLv2: GNU GPL version 2 or later</p>
+
+<p>This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.</p>
+<h2 class='lightblue'>
+SEE ALSO
+</h2><p>
+<a href='http://github.com/trapd00r/RPD'>Radio Playing Daemon</a>
+
+and 
+
+<a href='http://github.com/trapd00r/Mplayer-NowPlaying'>Mplayer::NowPlaying</a>
+
+which is used for the metadata info.
+
+</p><h2 class='pink'>
+GET IT
+</h2><div class='highlight'><pre><code class='bash'>git clone git://github.com/trapd00r/Mplayer-NowPlaying.git
+<span class='nb'>cd </span>Mplayer-NowPlaying
+perl Makefile.PL
+make
+su -c <span class='s1'>&#39;make install&#39;</span>
+
+git clone git://github.com/trapd00r/rmcd.git
+<span class='nb'>cd </span>rmcd
+perl Makefile.PL
+make
+su -c <span class='s1'>&#39;make install&#39;</span>
+
+<span class='c'># Edit the configuration file and move it to $XDG_CONFIG_HOME/rmcd/rmcd.conf:</span>
+mkdir -p <span class='nv'>$XDG_CONFIG_HOME</span>/rmcd
+cp rmcd.conf !<span class='err'>$</span>
+
+<span class='c'># Start rmcd and load some music</span>
+rmcd -l psy
+</code></pre>
+</div>
+</div>
+
+
+<div id="related">
+  <h3>Possibly Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/code/2010/06/07/perl-interface-for-the-music-player-daemon/">Perl Interface for the Music Player Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/06/07/radio-playing-daemon/">Radio Playing Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/06/26/mplayerd/">Mplayerd</a></li>
+    
+  </ul>
+</div>
+
+<!-- This is for code colorization which doesn't seem to work very well in IE... i guess I don't care very much -->
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shCore.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushRuby.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushPhp.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushXml.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushCss.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushBash.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushJScript.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.ClipboardSwf = 'http://communicatopia.s3.amazonaws.com/js/clipboard.swf';
+//name, showGutter, showControls, collapseAll, firstLine , showColumns
+dp.SyntaxHighlighter.HighlightAll('code',true, true,true,1,true);
+</script>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/firefox-remote">firefox-remote</a> ||
+    <a href="http://github.com/trapd00r/ttycolor">ttycolor</a> ||
+    <a href="http://github.com/trapd00r/rel">rel</a>
+
+    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a>
+
+  </div>
+</div>
+</body>

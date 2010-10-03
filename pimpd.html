@@ -1,0 +1,83 @@
+<link rel="stylesheet" type="text/css" href="slidy.css">
+<h1>Perl Interface for the Music Player Daemon</h1>
+
+<p>pimpd is an MPD client written in perl that strives to implement the features
+mpc is missing. This includes, but is not limited to:</p>
+
+<ul>
+<li>Regular expression based database queries</li>
+<li>Regular expression based searches in active playlist</li>
+<li>Quick searches for artist, album and title</li>
+<li>Randomizing of playlist; you could add 100 (carefully!) randomly selected
+tracks to your playlist</li>
+<li>Fetching of lyrics on demand</li>
+<li>Queue functionality</li>
+<li>Interactive shell for basic MPD operations</li>
+<li>Monitoring of MPD - Whenever a song change takes place, pimpd announces</li>
+<li>Ability to easily copy current track to specified location; i.e your portable <br />
+musicplayer of choice or maybe to your to-burn directory</li>
+<li>Huge load of interesting information regarding what's currently spinning</li>
+<li>Support for 256 colors</li>
+<li>Support for colorschemes</li>
+</ul>
+
+<p><img src="http://github.com/trapd00r/pimpd/raw/master/pimpd-1.0-screenshot.png" alt="screenshot" title="" /></p>
+
+<p>Please see below for a full list of options.
+    Usage: pimpd.pl [OPTIONS] (ARGUMENT)</p>
+
+<pre><code>OPTIONS:
+    -i, --info          print current information
+   -np, --current       print current information in one line
+    -r, --randomize     randomize a new playlist with &lt;integer&gt; tracks
+    -c, --copy          copy the current track to location &lt;string&gt; 
+    -f, --favorite      favorize the current track. If no name for the
+                        playlist is given, the 'genre' id3-tag is used
+    -l, --listalbums    list all albums by &lt;string&gt; or current artist
+    -s, --show          show current playlist
+    -p, --play          play the number &lt;integer&gt; track in playlist
+    -a, --add           add playlist &lt;string&gt; and play it
+    -m, --monitor       monitor MPD for song changes, output on STDOUT
+   -ly, --lyrics        show lyrics for the current song
+    -q, --queue         queue &lt;integer&gt; tracks in playlist
+    -e, --external      list all tracks in external playlist &lt;string&gt;
+   -ct, --ctrl          spawn the interactive pimpd shell 
+  -spl, --search-pl     search the active playlist for &lt;pattern&gt;
+  -sdb, --search-db     search the database for &lt;pattern&gt; and add the 
+                        results to active playlist
+  -sar, --search-artist search for artist name containing &lt;string&gt;
+  -sal, --search-album  search for album name containing &lt;string&gt;
+  -set, --search-title  search for song title containing &lt;string&gt;
+   -no, --nocolor       dont use colorized output
+
+    -h, --help          show this help
+
+PATTERN is Perl RE: '(foo|bar)', '(foo)?bar', 'foobarb.*', 'foo(d+)'
+</code></pre>
+
+<p>To install the dependencies:</p>
+
+<pre><code># ./INSTALL_MODULES
+</code></pre>
+
+<p>or use your package manager of choice.
+In archlinux, you could just use:
+    $ yaourt -S perl-html-tokeparser-simple perl-audio-mpd perl-libwww
+                perl-text-autoformat</p>
+
+<p>To install pimpd:
+  Copy the configuration file to either /etc/pimpd.conf or
+  $XDG<em>CONFIG</em>HOME/pimpd/pimpd.conf</p>
+
+<p>Copy pimpd to /usr/bin or any other location you prefer in your $PATH</p>
+
+<p>Dont forget to edit the configuration file.</p>
+
+<h1>License</h1>
+
+<p>Copyright (C) 2010 Magnus Woldrich</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License, version 2, as published by the
+Free Software Foundation</p>
+

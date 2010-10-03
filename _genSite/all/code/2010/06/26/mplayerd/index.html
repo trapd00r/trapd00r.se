@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="semi">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> //
+      <a href="/os"   class="green">os(linux,unix)</a> ?
+      <a href="/code" class="orange">hacks(code)</a> :
+      <a href="/me"   class="lightgreen">me(self)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2 id='mplayerd'>Mplayerd</h2>
+
+<p><strong>Mplayerd</strong> aims to be a replacement for MPD.</p>
+
+<h2 id='code_as_of_now'>Code as of NOW</h2>
+<div class='highlight'><pre><code class='perl'><span class='c1'>#!/usr/bin/perl</span>
+<span class='k'>our</span> <span class='nv'>$VERSION</span> <span class='o'>=</span> <span class='mi'>0</span><span class='o'>.</span><span class='mi'>3</span><span class='p'>;</span>
+<span class='cm'>=mplayerd</span>
+<span class='cm'>  mplayerd - mplayer daemon</span>
+<span class='cm'>  Control it by issuing commands through the named pipe</span>
+<span class='cm'>  Get now playing info by executing mplayerd when the daemon&#39;s already running</span>
+<span class='cm'>=cut</span>
+
+<span class='k'>use</span> <span class='n'>strict</span><span class='p'>;</span>
+<span class='k'>use</span> <span class='nn'>Mplayer::</span><span class='n'>NowPlaying</span> <span class='sx'>qw($np_log np)</span><span class='p'>;</span>
+<span class='k'>use</span> <span class='n'>Carp</span><span class='p'>;</span>
+<span class='k'>use</span> <span class='nn'>Data::</span><span class='n'>Dumper</span><span class='p'>;</span>
+<span class='k'>use</span> <span class='nn'>Getopt::</span><span class='n'>Long</span><span class='p'>;</span>
+<span class='k'>use</span> <span class='n'>Cwd</span> <span class='s'>&#39;abs_path&#39;</span><span class='p'>;</span>
+
+
+<span class='k'>my</span> <span class='nv'>$fifo</span>  <span class='o'>=</span> <span class='s'>&quot;$ENV{HOME}/.mplayer/mplayerd.fifo&quot;</span><span class='p'>;</span>
+<span class='k'>my</span> <span class='nv'>$log</span>   <span class='o'>=</span> <span class='s'>&quot;$ENV{HOME}/.mplayer/mplayerd.log&quot;</span><span class='p'>;</span>
+<span class='k'>my</span> <span class='nv'>$lock</span>  <span class='o'>=</span> <span class='s'>&#39;/tmp/mplayerd.pid&#39;</span><span class='p'>;</span> <span class='c1'># /var/run/</span>
+
+<span class='nv'>$np_log</span> <span class='o'>=</span> <span class='nv'>$log</span><span class='p'>;</span>
+
+<span class='k'>my</span> <span class='nv'>$PID</span><span class='p'>;</span> <span class='c1'># for child</span>
+
+<span class='k'>if</span><span class='p'>(</span><span class='o'>!</span><span class='nv'>@ARGV</span><span class='p'>)</span> <span class='p'>{</span>
+  <span class='k'>if</span><span class='p'>(</span><span class='o'>!-</span><span class='n'>e</span> <span class='nv'>$lock</span><span class='p'>)</span> <span class='p'>{</span>
+    <span class='n'>yell</span><span class='p'>(</span><span class='s'>&quot;Mplayerd is not running\n&quot;</span><span class='p'>);</span>
+    <span class='n'>usage</span><span class='p'>();</span>
+  <span class='p'>}</span>
+<span class='p'>}</span>
+
+<span class='n'>GetOptions</span><span class='p'>(</span>
+  <span class='s'>&#39;cmd:s&#39;</span>     <span class='o'>=&gt;</span> <span class='o'>\&amp;</span><span class='n'>cmd_in</span><span class='p'>,</span>
+  <span class='s'>&#39;kill&#39;</span>      <span class='o'>=&gt;</span> <span class='o'>\&amp;</span><span class='n'>killchild</span><span class='p'>,</span>
+<span class='p'>);</span>
+
+<span class='c1'>#map($_ = &quot;&#39;&quot;.abs_path($_).&quot;&#39;&quot;, @ARGV); # not needed in the list form of exec()</span>
+<span class='k'>my</span> <span class='nv'>@files</span> <span class='o'>=</span> <span class='nv'>@ARGV</span><span class='p'>;</span>
+<span class='k'>print</span> <span class='s'>&quot;$_\n&quot;</span> <span class='k'>for</span> <span class='nv'>@files</span><span class='p'>;</span>
+
+<span class='k'>unless</span><span class='p'>(</span><span class='o'>-</span><span class='n'>f</span> <span class='nv'>$log</span><span class='p'>)</span> <span class='p'>{</span>
+  <span class='nb'>open</span><span class='p'>(</span><span class='k'>my</span> <span class='nv'>$fh</span><span class='p'>,</span> <span class='s'>&#39;&gt;&#39;</span><span class='p'>,</span> <span class='nv'>$log</span><span class='p'>);</span>
+  <span class='nb'>close</span><span class='p'>(</span><span class='nv'>$fh</span><span class='p'>);</span>
+<span class='p'>}</span>
+<span class='k'>unless</span><span class='p'>(</span><span class='o'>-</span><span class='n'>p</span> <span class='nv'>$fifo</span><span class='p'>)</span> <span class='p'>{</span>
+  <span class='k'>use</span> <span class='n'>POSIX</span><span class='p'>;</span>
+  <span class='n'>mkfifo</span><span class='p'>(</span><span class='nv'>$fifo</span><span class='p'>,</span> <span class='mo'>0666</span><span class='p'>)</span> <span class='ow'>or</span> <span class='nb'>die</span> <span class='s'>&quot;Cant mkfifo $fifo: $!&quot;</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='k'>if</span><span class='p'>(</span><span class='o'>!-</span><span class='n'>e</span> <span class='nv'>$lock</span><span class='p'>)</span> <span class='p'>{</span>
+  <span class='n'>daemonize</span><span class='p'>();</span>
+  <span class='c1'># system() will fork. So will exec(), unless used in list mode.</span>
+  <span class='c1'># From here, mplayer will take over our process (the grandchild)</span>
+  <span class='nb'>exec</span><span class='p'>(</span><span class='s'>&#39;mplayer&#39;</span><span class='p'>,</span> <span class='s'>&#39;-identify&#39;</span><span class='p'>,</span> <span class='s'>&#39;-slave&#39;</span><span class='p'>,</span> <span class='s'>&quot;-input&quot;</span><span class='p'>,</span> <span class='s'>&quot;file=$fifo&quot;</span><span class='p'>,</span> <span class='nv'>@files</span><span class='p'>);</span>
+<span class='p'>}</span>
+<span class='k'>else</span> <span class='p'>{</span>
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\t\033[38;5;197m\033[1mMPLAYERD\033[0m\033[38;5;178m\033[0m\n&quot;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$artist</span>  <span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;artist&#39;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$album</span>   <span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;album&#39;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$title</span>   <span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;title&#39;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$year</span>    <span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;year&#39;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$file</span>    <span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;file&#39;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$track</span>   <span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;track&#39;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$genre</span>   <span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;genre&#39;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$comment</span> <span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;comment&#39;</span><span class='p'>);</span>
+  
+  <span class='k'>my</span> <span class='nv'>$codec</span>   <span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;codec&#39;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$format</span>  <span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;format&#39;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$length</span>  <span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;length&#39;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$channels</span><span class='o'>=</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;channels&#39;</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$bitrate</span> <span class='o'>=</span> <span class='nb'>sprintf</span><span class='p'>(</span><span class='s'>&quot;%d&quot;</span><span class='p'>,</span> <span class='n'>np</span><span class='p'>(</span><span class='s'>&#39;bitrate&#39;</span><span class='p'>));</span>
+
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;033m\033[1m%10s\033[0m: %s\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;Artist&#39;</span><span class='p'>,</span> <span class='nv'>$artist</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$artist</span><span class='p'>;</span>
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;032m\033[1m%10s\033[0m: %s\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;Album&#39;</span><span class='p'>,</span>  <span class='nv'>$album</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$album</span><span class='p'>;</span>
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;031m\033[1m%10s\033[0m: %s\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;Song&#39;</span><span class='p'>,</span>   <span class='nv'>$title</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$title</span><span class='p'>;</span>
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;030m\033[1m%10s\033[0m: %s\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;Year&#39;</span><span class='p'>,</span>   <span class='nv'>$year</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$year</span><span class='p'>;</span>
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;029m\033[1m%10s\033[0m: %s\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;File&#39;</span><span class='p'>,</span>   <span class='nv'>$file</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$file</span><span class='p'>;</span>
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;035m\033[1m%10s\033[0m: %s\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;Track&#39;</span><span class='p'>,</span>  <span class='nv'>$track</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$track</span><span class='p'>;</span>
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;036m\033[1m%10s\033[0m: %s\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;Genre&#39;</span><span class='p'>,</span>  <span class='nv'>$genre</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$genre</span><span class='p'>;</span>
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;037m\033[1m%10s\033[0m: \033[38;5;240m%s\033[0m\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;Comment&#39;</span><span class='p'>,</span><span class='nv'>$comment</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$comment</span><span class='p'>;</span>
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;050m\033[1m%10s\033[0m: %s\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;Codec&#39;</span><span class='p'>,</span>  <span class='nv'>$codec</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$codec</span><span class='p'>;</span>
+
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;049m\033[1m%10s\033[0m: %s\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;Format&#39;</span><span class='p'>,</span> <span class='nv'>$format</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$format</span><span class='p'>;</span>
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;048m\033[1m%10s\033[0m: %s\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;Length&#39;</span><span class='p'>,</span> <span class='nv'>$length</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$length</span><span class='p'>;</span>
+  <span class='nb'>printf</span><span class='p'>(</span><span class='s'>&quot;\033[38;5;047m\033[1m%10s\033[0m: %s\n&quot;</span><span class='p'>,</span> <span class='s'>&#39;Channels&#39;</span><span class='p'>,</span> <span class='nv'>$channels</span><span class='p'>)</span>
+    <span class='k'>unless</span> <span class='o'>!</span><span class='nv'>$channels</span><span class='p'>;</span>
+
+  <span class='n'>yell</span><span class='p'>(</span><span class='s'>&quot;\nmplayerd is running.\n&quot;</span><span class='p'>);</span>
+<span class='p'>}</span>
+
+
+<span class='k'>sub </span><span class='nf'>cmd_in</span> <span class='p'>{</span>
+  <span class='nb'>shift</span><span class='p'>;</span>
+  <span class='k'>my</span> <span class='nv'>$cmd</span> <span class='o'>=</span> <span class='nb'>shift</span><span class='p'>;</span>
+
+  <span class='k'>my</span> <span class='nv'>%allowed_cmds</span> <span class='o'>=</span> <span class='p'>(</span>
+    <span class='k'>next</span>    <span class='o'>=&gt;</span> <span class='s'>&#39;pt_step 1&#39;</span><span class='p'>,</span>
+    <span class='n'>prev</span>    <span class='o'>=&gt;</span> <span class='s'>&#39;pt_step -1&#39;</span><span class='p'>,</span>
+    <span class='n'>toggle</span>  <span class='o'>=&gt;</span> <span class='s'>&#39;pause&#39;</span><span class='p'>,</span>
+    <span class='n'>pause</span>   <span class='o'>=&gt;</span> <span class='s'>&#39;pause&#39;</span><span class='p'>,</span>
+    <span class='n'>stop</span>    <span class='o'>=&gt;</span> <span class='s'>&#39;stop&#39;</span><span class='p'>,</span>
+    <span class='n'>fs</span>      <span class='o'>=&gt;</span> <span class='s'>&#39;vo_fullscreen 1&#39;</span><span class='p'>,</span>
+  <span class='p'>);</span>
+  <span class='k'>if</span><span class='p'>(</span><span class='o'>!</span><span class='nb'>defined</span><span class='p'>(</span><span class='nv'>$allowed_cmds</span><span class='p'>{</span><span class='nv'>$cmd</span><span class='p'>}))</span> <span class='p'>{</span>
+    <span class='k'>print</span> <span class='s'>&quot;$cmd: Unrecognized command\n&quot;</span><span class='p'>;</span>
+    <span class='nb'>exit</span> <span class='mi'>1</span><span class='p'>;</span>
+  <span class='p'>}</span>
+    
+  <span class='nb'>open</span><span class='p'>(</span><span class='k'>my</span> <span class='nv'>$fh</span><span class='p'>,</span> <span class='s'>&#39;&gt;&#39;</span><span class='p'>,</span> <span class='nv'>$fifo</span><span class='p'>)</span> <span class='ow'>or</span> <span class='nb'>die</span> <span class='s'>&quot;Cant open $fifo for writing: $!&quot;</span><span class='p'>;</span>
+  <span class='k'>print</span> <span class='nv'>$fh</span> <span class='nv'>$allowed_cmds</span><span class='p'>{</span><span class='nv'>$cmd</span><span class='p'>},</span> <span class='s'>&quot;\n&quot;</span><span class='p'>;</span>
+  <span class='nb'>close</span><span class='p'>(</span><span class='nv'>$fh</span><span class='p'>);</span>
+  <span class='nb'>exit</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='k'>sub </span><span class='nf'>daemonize</span> <span class='p'>{</span>
+  <span class='k'>use</span> <span class='n'>POSIX</span> <span class='s'>&#39;setsid&#39;</span><span class='p'>;</span>
+  <span class='nv'>$PID</span> <span class='o'>=</span> <span class='nb'>fork</span><span class='p'>();</span>
+  <span class='nb'>exit</span> <span class='mi'>0</span> <span class='k'>if</span> <span class='nv'>$PID</span><span class='p'>;</span> <span class='c1'># parent</span>
+  <span class='nb'>exit</span> <span class='mi'>1</span> <span class='k'>if</span> <span class='o'>!</span><span class='nb'>defined</span><span class='p'>(</span><span class='nv'>$PID</span><span class='p'>);</span> <span class='c1'># out of resources</span>
+
+  <span class='n'>setsid</span><span class='p'>();</span>
+  <span class='nv'>$PID</span> <span class='o'>=</span> <span class='nb'>fork</span><span class='p'>();</span>
+  <span class='nb'>exit</span> <span class='mi'>1</span> <span class='k'>if</span> <span class='o'>!</span><span class='nb'>defined</span><span class='p'>(</span><span class='nv'>$PID</span><span class='p'>);</span> <span class='c1'># out of resources</span>
+
+  <span class='k'>if</span><span class='p'>(</span><span class='nv'>$PID</span><span class='p'>)</span> <span class='p'>{</span> <span class='c1'># parent</span>
+    <span class='nb'>waitpid</span><span class='p'>(</span><span class='nv'>$PID</span><span class='p'>,</span> <span class='mi'>0</span><span class='p'>);</span>
+    <span class='nb'>unlink</span><span class='p'>(</span><span class='nv'>$lock</span><span class='p'>);</span> <span class='c1'>#fail silently</span>
+    <span class='nb'>exit</span> <span class='mi'>0</span><span class='p'>;</span>
+  <span class='p'>}</span>
+  <span class='k'>elsif</span><span class='p'>(</span><span class='nv'>$PID</span> <span class='o'>==</span> <span class='mi'>0</span><span class='p'>)</span> <span class='p'>{</span> <span class='c1'>#child</span>
+    <span class='nb'>open</span><span class='p'>(</span><span class='k'>my</span> <span class='nv'>$fh</span><span class='p'>,</span> <span class='s'>&#39;&gt;&#39;</span><span class='p'>,</span> <span class='nv'>$lock</span><span class='p'>)</span> <span class='ow'>or</span> <span class='nb'>die</span> <span class='s'>&quot;Cant open $lock: $!&quot;</span><span class='p'>;</span>
+    <span class='k'>print</span> <span class='nv'>$fh</span> <span class='vg'>$$</span><span class='p'>;</span>
+    <span class='nb'>close</span><span class='p'>(</span><span class='nv'>$fh</span><span class='p'>);</span>
+    <span class='nb'>open</span><span class='p'>(</span><span class='bp'>STDOUT</span><span class='p'>,</span> <span class='s'>&#39;&gt;&#39;</span><span class='p'>,</span> <span class='nv'>$log</span><span class='p'>);</span>
+    <span class='nb'>open</span><span class='p'>(</span><span class='bp'>STDERR</span><span class='p'>,</span> <span class='s'>&#39;&gt;&#39;</span><span class='p'>,</span> <span class='s'>&#39;/dev/null&#39;</span><span class='p'>);</span>
+    <span class='nb'>open</span><span class='p'>(</span><span class='bp'>STDIN</span><span class='p'>,</span> <span class='s'>&#39;&lt;&#39;</span><span class='p'>,</span> <span class='s'>&#39;/dev/null&#39;</span><span class='p'>);</span>
+  <span class='p'>}</span>
+<span class='p'>}</span>
+
+<span class='k'>sub </span><span class='nf'>killchild</span> <span class='p'>{</span>
+  <span class='nb'>open</span><span class='p'>(</span><span class='k'>my</span> <span class='nv'>$fh</span><span class='p'>,</span> <span class='s'>&#39;&lt;&#39;</span><span class='p'>,</span> <span class='nv'>$lock</span><span class='p'>)</span> <span class='ow'>or</span> <span class='n'>yell</span><span class='p'>(</span><span class='s'>&quot;Mplayerd is not running\n&quot;</span><span class='p'>)</span> <span class='ow'>and</span> <span class='nb'>exit</span><span class='p'>(</span><span class='mi'>1</span><span class='p'>);</span>
+  <span class='k'>my</span> <span class='nv'>$tokill</span> <span class='o'>=</span> <span class='s-Regexp'>&lt;$fh&gt;</span><span class='p'>;</span>
+  <span class='nb'>close</span><span class='p'>(</span><span class='nv'>$fh</span><span class='p'>);</span>
+
+  <span class='k'>if</span><span class='p'>(</span><span class='nb'>kill</span><span class='p'>(</span><span class='mi'>9</span><span class='p'>,</span> <span class='nv'>$tokill</span><span class='p'>))</span> <span class='p'>{</span>
+    <span class='n'>yell</span><span class='p'>(</span><span class='s'>&quot;mplayerd: @{[error($tokill)]} killed\n&quot;</span><span class='p'>);</span>
+  <span class='p'>}</span>
+  <span class='k'>else</span> <span class='p'>{</span>
+    <span class='n'>yell</span><span class='p'>(</span><span class='s'>&quot;Could not kill $tokill\n&quot;</span><span class='p'>);</span>
+  <span class='p'>}</span>
+<span class='nb'>unlink</span><span class='p'>(</span><span class='nv'>$lock</span><span class='p'>);</span>
+<span class='nb'>exit</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='k'>sub </span><span class='nf'>yell</span> <span class='p'>{</span>
+  <span class='k'>my</span> <span class='nv'>@text</span> <span class='o'>=</span> <span class='nv'>@_</span><span class='p'>;</span>
+  <span class='nb'>map</span><span class='p'>{</span><span class='nv'>$_</span> <span class='o'>=</span> <span class='s'>&quot;\033[1m$_\033[0m&quot;</span><span class='p'>}</span> <span class='nv'>@text</span><span class='p'>;</span>
+  <span class='k'>print</span> <span class='nv'>@text</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='k'>sub </span><span class='nf'>error</span> <span class='p'>{</span>
+  <span class='k'>my</span> <span class='nv'>@text</span> <span class='o'>=</span> <span class='nv'>@_</span><span class='p'>;</span>
+  <span class='nb'>map</span><span class='p'>{</span><span class='nv'>$_</span> <span class='o'>=</span> <span class='s'>&quot;\033[31;1m$_\033[0m&quot;</span><span class='p'>}</span> <span class='nv'>@text</span><span class='p'>;</span>
+  <span class='k'>return</span> <span class='nv'>@text</span><span class='p'>;</span>
+<span class='p'>}</span>
+
+<span class='k'>sub </span><span class='nf'>usage</span> <span class='p'>{</span>
+  <span class='k'>print</span> <span class='o'>&lt;&lt;</span> <span class='s'>&quot;USAGE&quot;</span><span class='p'>;</span>
+  <span class='n'>mplayerd</span> <span class='nv'>$VERSION</span>
+  <span class='n'>Usage:</span> <span class='n'>mplayerd</span> <span class='p'>[</span><span class='n'>OPTIONS</span><span class='p'>]</span> <span class='p'>(</span><span class='n'>ARGS</span><span class='p'>)</span>
+
+  <span class='n'>OPTIONS:</span>
+      <span class='o'>-</span><span class='n'>c</span><span class='p'>,</span> <span class='o'>--</span><span class='n'>cmd</span>     <span class='nb'>send</span> <span class='n'>a</span> <span class='n'>command</span> <span class='n'>to</span> <span class='n'>mplayer</span>
+      <span class='o'>-</span><span class='n'>k</span><span class='p'>,</span> <span class='o'>--</span><span class='nb'>kill</span>    <span class='nb'>kill</span> <span class='n'>the</span> <span class='n'>playing</span> <span class='n'>process</span>
+
+<span class='n'>USAGE</span>
+
+<span class='nb'>exit</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<h2 id='license'>License</h2>
+
+<p>Copyright (C) 2010 Magnus Woldrich</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License, version 2, as published by the Free Software Foundation.</p>
+</div>
+
+
+<div id="related">
+  <h3>Possibly Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/code/2010/06/07/perl-interface-for-the-music-player-daemon/">Perl Interface for the Music Player Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/07/12/remote-controlled-mplayer-daemon/">Remote Mplayer Client/Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/06/07/radio-playing-daemon/">Radio Playing Daemon</a></li>
+    
+  </ul>
+</div>
+
+<!-- This is for code colorization which doesn't seem to work very well in IE... i guess I don't care very much -->
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shCore.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushRuby.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushPhp.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushXml.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushCss.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushBash.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushJScript.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.ClipboardSwf = 'http://communicatopia.s3.amazonaws.com/js/clipboard.swf';
+//name, showGutter, showControls, collapseAll, firstLine , showColumns
+dp.SyntaxHighlighter.HighlightAll('code',true, true,true,1,true);
+</script>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/firefox-remote">firefox-remote</a> ||
+    <a href="http://github.com/trapd00r/ttycolor">ttycolor</a> ||
+    <a href="http://github.com/trapd00r/rel">rel</a>
+
+    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a>
+
+  </div>
+</div>
+</body>

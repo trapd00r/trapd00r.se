@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="semi">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> //
+      <a href="/os"   class="green">os(linux,unix)</a> ?
+      <a href="/code" class="orange">hacks(code)</a> :
+      <a href="/me"   class="lightgreen">me(self)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2>rmshit solves annoying Desktop (et al) creation</h2>
+<p class="publish_date">30 May 2010</p>
+<p>
+<p>Tired of having unwanted configs, directories and bloat messing with your home dir?</p>
+<p>So was I.</p>
+<p><a href="http://github.com/trapd00r/rmshit">rmshit</a> uses <a
+href="http://en.wikipedia.org/wiki/Inotify">inotify</a> to watch your $<span class="caps">HOME</span> (or, alternatively, any other dir) for<br />
+unwanted files and instantly deletes them. Since it&#8217;s a daemon, you can start<br />
+it at boot time and know that&#8217;ll keep your directories clean.</p>
+<p><strong>To install the dependencies: </strong></p>
+<div class="highlight"><pre><code class="bash">cpan Linux::Inotify2 Working::Daemon
+</code></pre>
+</div><p><i>or use your package manager of choice.</i></p>
+<p><strong>To install rmshit: </strong></p>
+<div class="highlight"><pre><code class="bash">git clone git://github.com/trapd00r/rmshit.git
+<span class="nb">cd </span>rmshit
+perl Makefile.PL
+make
+make install
+</code></pre>
+</div><p>You might want to edit the <strong>@shittyfiles</strong> array, containing unwanted files and dirs. <br />
+It looks like this right now:</p>
+<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">@shittyfiles</span> <span class="o">=</span> <span class="sx">qw(.dbus</span>
+<span class="sx">                     .gconf</span>
+<span class="sx">                     .gconfd</span>
+<span class="sx">                     .links</span>
+<span class="sx">                     .lynx</span>
+<span class="sx">                     .local</span>
+<span class="sx">                     .Xauthority</span>
+<span class="sx">                     .dmenu_cache</span>
+<span class="sx">                     .fmenu_cache</span>
+<span class="sx">                     .esd_auth</span>
+<span class="sx">                     .fehrc</span>
+<span class="sx">                     .xsel.log</span>
+<span class="sx">                     .ncmpcpp</span>
+<span class="sx">                     Desktop</span>
+<span class="sx">                     .adobe</span>
+<span class="sx">                     .macromedia</span>
+<span class="sx">                   )</span><span class="p">;</span>
+</code></pre>
+</div>
+</div>
+
+
+<div id="related">
+  <h3>Possibly Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/code/2010/06/07/radio-playing-daemon/">Radio Playing Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2010/06/30/The-quest-for-The-Element/">The quest for The Element</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/06/07/perl-interface-for-the-music-player-daemon/">Perl Interface for the Music Player Daemon</a></li>
+    
+  </ul>
+</div>
+
+<!-- This is for code colorization which doesn't seem to work very well in IE... i guess I don't care very much -->
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shCore.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushRuby.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushPhp.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushXml.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushCss.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushBash.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushJScript.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.ClipboardSwf = 'http://communicatopia.s3.amazonaws.com/js/clipboard.swf';
+//name, showGutter, showControls, collapseAll, firstLine , showColumns
+dp.SyntaxHighlighter.HighlightAll('code',true, true,true,1,true);
+</script>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/firefox-remote">firefox-remote</a> ||
+    <a href="http://github.com/trapd00r/ttycolor">ttycolor</a> ||
+    <a href="http://github.com/trapd00r/rel">rel</a>
+
+    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a>
+
+  </div>
+</div>
+</body>

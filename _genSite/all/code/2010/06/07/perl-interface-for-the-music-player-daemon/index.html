@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="semi">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> //
+      <a href="/os"   class="green">os(linux,unix)</a> ?
+      <a href="/code" class="orange">hacks(code)</a> :
+      <a href="/me"   class="lightgreen">me(self)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2 id='perl_interface_for_the_music_player_daemon'>Perl Interface for the Music Player Daemon</h2>
+
+<p>PIMPD is a MPD client written in Perl that strives to implement the features mpc is missing. This includes, but is not limited to:</p>
+<ul>
+<li> Regular expression based database queries </li>
+<li> Regular expression based searches in active playlist </li>
+<li> Quick searches for artist, album and title </li>
+<li> Randomizing of playlist; you could add 100 (carefully!) randomly selected
+     tracks to your playlist </li>
+<li> Fetching of lyrics on demand </li>
+<li> Queue functionality </li>
+<li> Interactive shell for basic MPD operations </li>
+<li> Monitoring of MPD - Whenever a song change takes place, pimpd announces </li>
+<li> Ability to easily copy current track to specified location; i.e your portable
+     musicplayer of choice or maybe to your to-burn directory </li>
+<li> Huge load of interesting information regarding what's currently spinning </li>
+<li> Support for 256 colors </li>
+<li> Support for colorschemes </li>
+</ul>
+<p><img alt='screenshot' src='http://github.com/trapd00r/pimpd/raw/master/pimpd-1.4-screenshot2.png' /></p>
+
+<p>Please see below for a full list of options.</p>
+
+<pre><code>Usage: pimpd.pl [OPTIONS] (ARGUMENT)
+
+    -i, --info          print current information
+   -np, --current       print current information in one line
+    -r, --randomize     randomize a new playlist with &lt;integer&gt; tracks
+    -c, --copy          copy the current track to location &lt;string&gt; 
+    -f, --favorite      favorize the current track. If no name for the
+                        playlist is given, the &#39;genre&#39; id3-tag is used
+    -l, --listalbums    list all albums by &lt;string&gt; or current artist
+    -s, --show          show current playlist
+    -p, --play          play the number &lt;integer&gt; track in playlist
+    -a, --add           add playlist &lt;string&gt; and play it
+    -m, --monitor       monitor MPD for song changes, output on STDOUT
+   -ly, --lyrics        show lyrics for the current song
+    -q, --queue         queue &lt;integer&gt; tracks in playlist
+    -e, --external      list all tracks in external playlist &lt;string&gt;
+   -ct, --ctrl          spawn the interactive pimpd shell 
+  -spl, --search-pl     search the active playlist for &lt;pattern&gt;
+  -sdb, --search-db     search the database for &lt;pattern&gt; and add the 
+                        results to active playlist
+  -sar, --search-artist search for artist name containing &lt;string&gt;
+  -sal, --search-album  search for album name containing &lt;string&gt;
+  -set, --search-title  search for song title containing &lt;string&gt;
+   -no, --nocolor       dont use colorized output
+
+    -h, --help          show this help
+
+PATTERN is Perl RE: &#39;(foo|bar)&#39;, &#39;(foo)?bar&#39;, &#39;foobarb.*&#39;, &#39;foo(d+)&#39;</code></pre>
+
+<p><strong>To install the dependencies:</strong></p>
+<div class='highlight'><pre><code class='bash'>./INSTALL_MODULES
+</code></pre>
+</div>
+<p><em>or use your package manager of choice.</em></p>
+
+<p>In <strong>archlinux</strong>, you could just use:</p>
+<div class='highlight'><pre><code class='bash'>yaourt -S perl-html-tokeparser-simple perl-audio-mpd perl-libwww <span class='se'>\</span>
+            perl-text-autoformat
+</code></pre>
+</div>
+<p><strong>To install pimpd:</strong></p>
+
+<p>Copy the configuration file to <em>$XDG_CONFIG_HOME/pimpd/pimpd.conf</em> <strong>or</strong> <em>$HOME/.config/pimpd/pimpd.conf</em> <strong>or</strong> <em>/etc/pimpd.conf</em></p>
+
+<p>Copy <strong>pimpd</strong> to <strong>/usr/bin</strong> or any other location you prefer in your <em>$PATH</em></p>
+
+<p><em>Dont forget to edit the configuration file!</em></p>
+
+<h2 id='license'>License</h2>
+
+<p>Copyright (C) 2010 Magnus Woldrich</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License, version 2, as published by the Free Software Foundation</p>
+</div>
+
+
+<div id="related">
+  <h3>Possibly Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/code/2010/07/12/remote-controlled-mplayer-daemon/">Remote Mplayer Client/Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/06/07/radio-playing-daemon/">Radio Playing Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/06/26/mplayerd/">Mplayerd</a></li>
+    
+  </ul>
+</div>
+
+<!-- This is for code colorization which doesn't seem to work very well in IE... i guess I don't care very much -->
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shCore.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushRuby.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushPhp.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushXml.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushCss.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushBash.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushJScript.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.ClipboardSwf = 'http://communicatopia.s3.amazonaws.com/js/clipboard.swf';
+//name, showGutter, showControls, collapseAll, firstLine , showColumns
+dp.SyntaxHighlighter.HighlightAll('code',true, true,true,1,true);
+</script>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/firefox-remote">firefox-remote</a> ||
+    <a href="http://github.com/trapd00r/ttycolor">ttycolor</a> ||
+    <a href="http://github.com/trapd00r/rel">rel</a>
+
+    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a>
+
+  </div>
+</div>
+</body>

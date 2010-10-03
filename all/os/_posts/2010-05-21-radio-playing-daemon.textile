@@ -1,0 +1,13 @@
+---
+layout: post
+title: "radio playing daemon"
+description: radiod is a daemon playing radiostreams, sort of like mpd does for music
+keywords: radiod radio streaming mplayer linux daemon
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 21 May 2010 <p>
+Think <a href="http://mpd.wiki.com">mpd</a>. 
+Replace the 'music' string with 'radio' and you'll get <a href="http://github.com/trapd00r/radiod">Radio Playing   Daemon</a>
+</p>

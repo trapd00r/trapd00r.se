@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="semi">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> //
+      <a href="/os"   class="green">os(linux,unix)</a> ?
+      <a href="/code" class="orange">hacks(code)</a> :
+      <a href="/me"   class="lightgreen">me(self)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2>But, how do I add a user?</h2>
+<p class="publish_date">18 May 2010</p>
+<p>Yesterday I was approached with a interesting problem.</p>
+<p>
+<p>This guy simply couldn&#8217;t write the &#8216;d&#8217; char anymore. To see if it was software<br />
+or hardware related, he was about to add a new user to try with. <br />
+He was confused how to add a new user though, since <strong>adduser</strong>, <strong>useradd</strong> and<br />
+<strong>/etc/passwd</strong> all have the &#8216;d&#8217; char in it.</p>
+</p>
+<p>There&#8217;s a couple more or less interesting ways to solve this.</p>
+<div class="highlight"><pre><code class="bash">usera + <span class="o">[</span>tab<span class="o">]</span>
+</code></pre>
+</div><div class="highlight"><pre><code class="bash">/usr/sbin/usera??
+</code></pre>
+</div><p> And the little more interesting way&#8230;</p>
+<div class="highlight"><pre><code class="bash"><span class="k">$(</span>perl -e <span class="s1">&#39;printf(&quot;a%s%suser\n&quot;,  chr(&#39;</span>100<span class="s1">&#39;) x 2);&#39;</span><span class="k">)</span>
+</code></pre>
+</div><p>
+<p>What this does is actually pretty simple.<br />
+We print a &#8216;a&#8217;, two &#8216;d&#8217; using the chr() function, &#8216;user&#8217;, and since we wrapped it<br />
+all in $(), it executes in the shell, and voilá!</p>
+</p>
+</div>
+
+
+<div id="related">
+  <h3>Possibly Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/perl/2010/05/18/expand-function-calls-in-a-string/">Expand function calls in a string</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2010/06/30/The-quest-for-The-Element/">The quest for The Element</a></li>
+    
+      <li>&raquo; <a href="/all/os/2010/05/19/control-firefox-remotely/">Control Firefox remotely</a></li>
+    
+  </ul>
+</div>
+
+<!-- This is for code colorization which doesn't seem to work very well in IE... i guess I don't care very much -->
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shCore.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushRuby.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushPhp.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushXml.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushCss.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushBash.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushJScript.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.ClipboardSwf = 'http://communicatopia.s3.amazonaws.com/js/clipboard.swf';
+//name, showGutter, showControls, collapseAll, firstLine , showColumns
+dp.SyntaxHighlighter.HighlightAll('code',true, true,true,1,true);
+</script>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/firefox-remote">firefox-remote</a> ||
+    <a href="http://github.com/trapd00r/ttycolor">ttycolor</a> ||
+    <a href="http://github.com/trapd00r/rel">rel</a>
+
+    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a>
+
+  </div>
+</div>
+</body>

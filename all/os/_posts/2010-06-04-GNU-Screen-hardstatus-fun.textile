@@ -1,0 +1,28 @@
+---
+layout: post
+title: "GNU Screen hardstatus fun"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 04 June 2010
+
+<p>
+Today I decided to revisit the wonderful world of GNU Screen hardstatus syntax.
+</p>
+
+<p>
+The ones that I've used for a year or so wasn't ultimate since I cheated quite a bit by changing the Xresources colors to match my screen settings.
+Yesterday I hacked a bit on <a href="http://github.com/trapd00r/utils/blob/master/scat">a cat with syntax highlighting powers</a> and wasn't very happy with keyword and function names in black and darkgrey colors - thanks to me cheating with the Xresources color mappings as well.
+</p>
+
+<p>
+Anyway, here's the results. Prepend for example <strong>hardstatus alwayslastline</strong>.
+</p>
+
+<img src="http://psy.trapd00r.se/scrots/gnuscreen.png">
+<pre name="code" class="terminal"> "%?%{gk}%-Lw%?%{mk}%n*%f %t%?(%u)%?%?%{gk}%+Lw%?%{Yk} | %{yk}RPD: %{Bk}%1`" </pre>
+<img src="http://psy.trapd00r.se/scrots/gnuscreen2.png">
+<pre name="code" class="terminal">'%{= M} %H%{= B} %l %= %{= w}%-w%{+b r}%n*%t%{-b r}%{w}%+w %= %{c}%d %D %{B}%c '</pre>
+<img src="http://psy.trapd00r.se/scrots/gnuscreen3.png">
+<pre name="code" class="terminal">"%?%{rk}%-Lw%?%{Ck}%n*%f %t%?(%u)%?%?%{rk}% +Lw%?%{Yk} | %{mk}%1` %{yk}%=%2`"</pre>

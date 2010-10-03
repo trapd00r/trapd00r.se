@@ -1,0 +1,39 @@
+---
+layout: post
+title: "But, how do I add a user?"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 18 May 2010
+
+<p>Yesterday I was approached with a interesting problem.</p>
+<p>
+This guy simply couldn't write the 'd' char anymore. To see if it was software
+or hardware related, he was about to add a new user to try with. 
+He was confused how to add a new user though, since *adduser*, *useradd* and
+*/etc/passwd* all have the 'd' char in it.
+</p>
+
+<p>There's a couple more or less interesting ways to solve this.</p>
+
+{% highlight bash %}
+usera + [tab]
+{% endhighlight %}
+
+{% highlight bash %}
+/usr/sbin/usera??
+{% endhighlight %}
+
+<p> And the little more interesting way...</p>
+
+{% highlight bash %}
+$(perl -e 'printf("a%s%suser\n",  chr('100') x 2);')
+{% endhighlight %}
+
+<p>
+What this does is actually pretty simple.
+We print a 'a', two 'd' using the chr() function, 'user', and since we wrapped it
+all in $(), it executes in the shell, and voilá!
+</p>
+

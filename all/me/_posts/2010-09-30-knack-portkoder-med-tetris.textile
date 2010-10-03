@@ -1,0 +1,37 @@
+---
+layout: post
+title: "Knäck portkoder med tetris"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 30 September 2010
+
+<p>
+I mitt arbete så kommer jag över en hel del portkoder.
+</p>
+
+<p>
+Jag har noterat ett intressant mönster. På det nuvarande arbetetet så bildar
+88% av de portkoder som är i bruk tetris-klossar.
+</p>
+
+<pre name="code" class="terminal">
+[1][2][3] 
+      [4] [3]
+          [6]
+[1][2]    [9]
+   [5][6] [0]
+</pre>
+
+
+<p>
+  Naturligtvis så är detta medvetet. Alla vet hur tetrisklossar ser ut, och 
+  genom att visualisera koden på detta viset så blir de avsevärt lättare att
+  komma ihåg - och knäcka.
+</p>
+<p>
+
+  De annars 10000 möjliga kombinationerna reduceras kraftigt till 16!
+
+</p>

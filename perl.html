@@ -1,0 +1,14 @@
+---
+layout: default
+title: Perl posts at trapd00r.se
+---
+
+<div id="home">
+  <h2 class="pink">perl(posts)</h2>
+  <ul class="posts">
+    {% for post in site.categories.perl %}
+      <li>&raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
+    {% endfor %}
+  </ul>
+  
+</div>

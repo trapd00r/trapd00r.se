@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="semi">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> //
+      <a href="/os"   class="green">os(linux,unix)</a> ?
+      <a href="/code" class="orange">hacks(code)</a> :
+      <a href="/me"   class="lightgreen">me(self)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2>Control Firefox remotely</h2>
+<p class="publish_date">19 May 2010</p>
+<p>
+<p>Do you wish to have firefox auto-refresh a certain page/tab?<br />
+Are you tired of having to focus the firefox window (means, leaving vim) just to switch tab, go back a couple of pages, open a new page, etc?</p>
+</p>
+<p>Fear no more.</p>
+<h3 class="orange"> MozRepl</h3>
+<p>
+<p>MozRepl is a javascript module that can be used to control various Mozilla based applications &#8216;from the inside&#8217;. <br />
+It is also an application itself &#8211; you can use it straight from the commandline.<br />
+Beware though, you&#8217;ll have to write javascript.</p>
+<p>Since I don&#8217;t like javascript, that wasn&#8217;t very appealing.<br />
+Lucky for me, there&#8217;s a couple of Perl bindings, and here&#8217;s the most interesting<br />
+ones.</p>
+</p>
+<p>
+<ul>
+<li> MozRepl::* </li>
+<li> MozRepl::RemoteObject </li>
+<li> <span class="caps">WWW</span>::Mechanize::Firefox </li>
+</ul>
+</p>
+<p>
+<p>Since I had prior knowledge of the <span class="caps">WWW</span>::Mechanize class, I went with<br />
+<span class="caps">WWW</span>::Mechanize::Firefox and started hacking.</p>
+<p>So far, I&#8217;ve created several functions:</p>
+</p>
+<p>
+<ul>
+<li> load new page $page </li>
+<li> refresh the current page </li>
+<li> back / forward </li>
+<li> get current <span class="caps">URI</span> </li>
+<li> save current page as <span class="caps">HTML</span> </li>
+<li> show basic information about the current page </li>
+<li> extract all links </li>
+<li> click (yep! :) </li>
+<li> load a local page / directory </li>
+<li> dump the current page as a png. This will dump what firefox have rendered -<br />
+   not only what <strong>you</strong> see. That means, you can make a full-sized <br />
+   <span class="caps">PNG</span> copy, no matter how big the page is. It also tries to be smart  by naming <br />
+   the captured pictures after title-tag (escaped to some extent).<br />
+   This have been possible with webkit for ages and something I missed in Fx. </li>
+</ul>
+</p>
+<p>
+<p>Now I have a couple of keybindings in my window manager for going back/forward,<br />
+load a uri (using the <strong><a href="http://github.com/trapd00r/clipbored/blob/master/scripts/dmenurl">dmenuurl</a></strong> script from <a href="http://github.com/trapd00r/clipbored"> my clipbored project</a>), etc.</p>
+<p>The ::Firefox subclass does not support all features of the main <span class="caps">WWW</span>::Mechanize<br />
+module yet, and therefore I&#8217;m using both.</p>
+<p>If you want to try it out, you&#8217;ll need the modules first:</p>
+<div class="highlight"><pre><code class="bash">cpan install WWW::Mechanize WWW::Mechanize::Firefox
+</code></pre>
+</div><p>When cpan is ready, just clone my repository:</p>
+<div class="highlight"><pre><code class="bash">git clone git://github.com/trapd00r/firefox-remote.git
+</code></pre>
+</div><p>And like always: feel free to fork and/or patch!</p>
+</p>
+</div>
+
+
+<div id="related">
+  <h3>Possibly Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/code/2010/06/07/perl-interface-for-the-music-player-daemon/">Perl Interface for the Music Player Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/07/12/remote-controlled-mplayer-daemon/">Remote Mplayer Client/Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/06/07/radio-playing-daemon/">Radio Playing Daemon</a></li>
+    
+  </ul>
+</div>
+
+<!-- This is for code colorization which doesn't seem to work very well in IE... i guess I don't care very much -->
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shCore.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushRuby.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushPhp.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushXml.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushCss.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushBash.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushJScript.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.ClipboardSwf = 'http://communicatopia.s3.amazonaws.com/js/clipboard.swf';
+//name, showGutter, showControls, collapseAll, firstLine , showColumns
+dp.SyntaxHighlighter.HighlightAll('code',true, true,true,1,true);
+</script>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/firefox-remote">firefox-remote</a> ||
+    <a href="http://github.com/trapd00r/ttycolor">ttycolor</a> ||
+    <a href="http://github.com/trapd00r/rel">rel</a>
+
+    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a>
+
+  </div>
+</div>
+</body>

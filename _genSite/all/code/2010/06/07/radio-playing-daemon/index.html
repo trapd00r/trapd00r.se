@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="semi">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> //
+      <a href="/os"   class="green">os(linux,unix)</a> ?
+      <a href="/code" class="orange">hacks(code)</a> :
+      <a href="/me"   class="lightgreen">me(self)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2 id='radio_playing_daemon'>Radio Playing Daemon</h2>
+
+<p><strong>RPD</strong> is a daemon that plays radio streams.</p>
+
+<p><em>Mplayer</em> is used for the actual backend, which means that the User is in charge.</p>
+
+<h2 id='radio_playing_client'>Radio Playing Client</h2>
+
+<p><strong>RPC</strong> is the application for controlling the Radio Playing Daemon (RPD).</p>
+
+<pre><code>Usage: rpc [OPTIONS] (ARGS) 
+
+OPTIONS:
+    np      show the currently playing song
+    npi     show the currently playing song on one line
+    play    play/switch to channel
+    list    list all available channels
+    fav     add track to the favlist
+    shfav   show favorites
+    son     turn on sound
+    soff    turn off sound
+    toggle  toggle playback status, pause/play
+    stop    pauses playback. If you really want to stop, use quit
+    quit    stops RPD
+
+EXAMPLES:
+    rpc play psy</code></pre>
+
+<h2 id='installation'>Installation</h2>
+
+<p>First, you&#8217;ll need a module from CPAN:</p>
+<div class='highlight'><pre><code class='bash'>cpan Working::Daemon
+</code></pre>
+</div>
+<p>Then grab the &#8216;now playing&#8217;-module:</p>
+<div class='highlight'><pre><code class='bash'>git clone git://github.com/trapd00r/Mplayer-Stream-NowPlaying.git
+<span class='nb'>cd </span>Mplayer-Stream-NowPlaying
+perl Makefile.PL
+make
+make install
+</code></pre>
+</div>
+<p>Now you&#8217;re ready to install RPD and RPC:</p>
+<div class='highlight'><pre><code class='bash'>git clone git://github.com/trapd00r/RPD.git
+<span class='nb'>cd </span>RPD
+perl Makefile.PL
+make
+make install
+</code></pre>
+</div>
+<p>Start RPD and <em>enjoy</em>.</p>
+
+<h2 id='license'>License</h2>
+
+<p>Copyright (C) 2010 Magnus Woldrich</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License, version 2, as published by the Free Software Foundation.</p>
+</div>
+
+
+<div id="related">
+  <h3>Possibly Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/code/2010/07/12/remote-controlled-mplayer-daemon/">Remote Mplayer Client/Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/06/07/perl-interface-for-the-music-player-daemon/">Perl Interface for the Music Player Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/06/26/mplayerd/">Mplayerd</a></li>
+    
+  </ul>
+</div>
+
+<!-- This is for code colorization which doesn't seem to work very well in IE... i guess I don't care very much -->
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shCore.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushRuby.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushPhp.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushXml.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushCss.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushBash.js"></script>
+<script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushJScript.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.ClipboardSwf = 'http://communicatopia.s3.amazonaws.com/js/clipboard.swf';
+//name, showGutter, showControls, collapseAll, firstLine , showColumns
+dp.SyntaxHighlighter.HighlightAll('code',true, true,true,1,true);
+</script>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/firefox-remote">firefox-remote</a> ||
+    <a href="http://github.com/trapd00r/ttycolor">ttycolor</a> ||
+    <a href="http://github.com/trapd00r/rel">rel</a>
+
+    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a>
+
+  </div>
+</div>
+</body>

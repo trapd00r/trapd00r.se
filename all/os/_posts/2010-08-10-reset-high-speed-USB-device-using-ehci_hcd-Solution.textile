@@ -1,0 +1,21 @@
+---
+layout: post
+title: "reset high speed USB device using ehci_hcd"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 10 August 2010
+
+<p>
+  Finally a solution.
+
+  Enable CONFIG_USB_EHCI_TT_NEWSCHED and recompile the kernel.
+</p>
+
+{%highlight perl%}
+-> Device Drivers
+  -> USB support
+    -> Support for Host-side USB
+      -> EHCI HCD (USB 2.0) support
+{%endhighlight%}

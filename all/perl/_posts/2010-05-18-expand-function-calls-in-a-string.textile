@@ -1,0 +1,21 @@
+---
+layout: post
+title: "Expand function calls in a string"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 18 May 2010
+
+<p> Normally when one wants to add a function call to a string variable,
+the concatation operator '.' is used;</p>
+
+{% highlight perl %}
+my $foo = 'the time is ->'.scalar(localtime).' <- the time is';
+{% endhighlight %}
+
+<p>Little known is the fact that you can expand calls directly in a string:</p>
+
+{% highlight perl%}
+my $foo = "the time is -> @{[scalar(localtime)]} <- the time is";
+{% endhighlight %}
