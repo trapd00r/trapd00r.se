@@ -1,0 +1,33 @@
+---
+layout: post
+title: "Archlinux and Perl 5.12"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 04 October 2010
+
+p. The upgrade from Perl 5.10 to 5.12.1 in Arch have caused a lot of headache. I had to manually rebuild almost 600 modules and a lot of regular users are frustrated due to the suddenly changed perl-bin-path, from the sane */usr/bin/perlbin* path to hiding them in */usr/lib*. What the fuck...
+
+p. I've searched, asked and questioned this decision for a couple of months now, to no avail. The path problem isn't hard to fix, though.
+
+p. First, use *pacman* to see where it actually installed things:
+
+{% highlight bash%}
+$ pacman -Ql colorcoke-git|grep bin
+colorcoke-git /usr/lib/perl5/vendor_perl/bin/
+colorcoke-git /usr/lib/perl5/vendor_perl/bin/colorcoke
+{% endhighlight %}
+
+p. Right. Add that (and the other missing dirs as well) to your $PATH in .bashrc or similar.
+
+{% highlight bash %}
+PATH=$PATH:/usr/lib/perl5/vendor_perl/bin:/usr/lib/perl5/core_perl/bin:/usr/lib/perl5/site_perl/bin
+{% endhighlight %}
+
+p. Use *hash -r* (bash) or *rehash* (zsh), and the PATH will be rehashed for executables.
+
+{% highlight bash %}
+$ which colorcoke
+/usr/lib/perl5/site_perl/bin/colorcoke
+{% endhighlight %}
