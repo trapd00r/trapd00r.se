@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="grey">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> //
+      <a href="/os"   class="green">os(linux,unix)</a> ?
+      <a href="/code" class="orange">hacks(code)</a> :
+      <a href="/me"   class="lightgreen">me(self)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2>Archlinux and Perl 5.12</h2>
+<p class="publish_date">04 October 2010</p>
+<p>The upgrade from Perl 5.10 to 5.12.1 in Arch have caused a lot of headache. I had to manually rebuild almost 600 modules and a lot of regular users are frustrated due to the suddenly changed perl-bin-path, from the sane <strong>/usr/bin/perlbin</strong> path to hiding them in <strong>/usr/lib</strong>. What the fuck&#8230;</p>
+<p>I&#8217;ve searched, asked and questioned this decision for a couple of months now, to no avail. The path problem isn&#8217;t hard to fix, though.</p>
+<p>First, use <strong>pacman</strong> to see where it actually installed things:</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>pacman -Ql colorcoke-git|grep bin
+colorcoke-git /usr/lib/perl5/vendor_perl/bin/
+colorcoke-git /usr/lib/perl5/vendor_perl/bin/colorcoke
+</code></pre>
+</div><p>Right. Add that (and the other missing dirs as well) to your $<span class="caps">PATH</span> in .bashrc or similar.</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/lib/perl5/vendor_perl/bin:/usr/lib/perl5/core_perl/bin:/usr/lib/perl5/site_perl/bin
+</code></pre>
+</div><p>Use <strong>hash -r</strong> (bash) or <strong>rehash</strong> (zsh), and the <span class="caps">PATH</span> will be rehashed for executables.</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>which colorcoke
+/usr/lib/perl5/site_perl/bin/colorcoke
+</code></pre>
+</div><div class="highlight"><pre><code class="perl"><span class="k">print</span><span class="p">(</span><span class="nv">$_</span><span class="o">-&gt;</span><span class="p">(</span><span class="nv">$_</span><span class="p">))</span><span class="k">for</span><span class="p">(</span><span class="n">sub</span><span class="p">{</span><span class="k">return</span><span class="p">(</span><span class="nb">grep</span><span class="p">(</span><span class="o">!</span><span class="sr">m$(?:[b-gik-oq-ty]+)$</span><span class="p">,</span><span class="nb">split</span><span class="p">(</span><span class="n">m</span><span class="p">;;,</span><span class="sx">qw-jyatopnh-</span><span class="p">)));});</span>
+</code></pre>
+</div>
+</div>
+
+
+<div id="related">
+  <h3>Somewhat Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/os/2010/10/04/archlinux-and-perl-5.12/">Archlinux and Perl 5.12</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2010/06/30/The-quest-for-The-Element/">The quest for The Element</a></li>
+    
+      <li>&raquo; <a href="/all/os/2010/10/03/top-25-commands-used-in-your-shell/">Top 25 commands used in your shell</a></li>
+    
+  </ul>
+</div>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
+    <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
+    <a href="http://github.com/trapd00r/utils">utils</a>
+
+    <p>
+    <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
+    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a></p>
+
+  </div>
+</div>
+</body>

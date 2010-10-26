@@ -34,38 +34,44 @@
 
   <div id="content">
     <div id="post">
-<h2>Magnus Woldrich</h2>
-<h3><span class="caps">JAPH</span></h3>
-<p>Yes, that&#8217;s right. <strong>Just Another Perl Hacker</strong>.</p>
-<p>I consider myself a free software advocate, hacker and geek. Besides reading<br />
-perldoc I enjoy writing Perl code and fixing other peoples bad Perl code.</p>
-<p>I also enjoy system administration (<span class="caps">GNU</span>/Linux, <span class="caps">BSD</span>), and I&#8217;m quite fluent in the<br />
-shell. I enjoy it even more if there&#8217;s a recent Perl version installed, since<br />
-that allows me to cheat.</p>
-<p>I&#8217;m trying to live by the <a href="http://en.wikipedia.org/wiki/KISS_principle"><span class="caps">KISS</span> principle</a> and the old <span class="caps">UNIX</span> pragma &#8216;do one<br />
-thing, and do it well&#8217;, not that anyone else does nomore.</p>
-<p>Music is what makes this life worth living. I&#8217;m constantly on the lookout for<br />
-new amazing artits. I&#8217;m also trying to find new ways to enjoy the music.<br />
-<a href="http://github.com/trapd00r/pimpd">I might have succeeded</a>.</p>
-<h3>Work</h3>
-<p>I&#8217;m currently employed by the local newspaper, doing nothing related to<br />
-programming at all. Would you like to help me change this? Then take a look at<br />
-my <a href="http://japh.se/cv.pdf">Curriclum Vitae</a> [<span class="caps">PDF</span>].</p>
-<h3>Contact</h3>
-<p>The best way to contact me would be by sending me an email. I&#8217;d accept <span class="caps">XMPP</span><br />
-requests as well, though. See the bottom of this page.</p>
+h2. Magnus Woldrich
+
+
+h3. JAPH
+
+p. Yes, that's right. *Just Another Perl Hacker*.
+
+p. I consider myself a free software advocate, hacker and geek. Besides reading
+perldoc I enjoy writing Perl code and fixing other peoples bad Perl code.
+
+p. I also enjoy system administration (GNU/Linux, BSD), and I'm quite fluent in the
+shell. I enjoy it even more if there's a recent Perl version installed, since
+that allows me to cheat.
+
+p. I'm trying to live by the <a href="http://en.wikipedia.org/wiki/KISS_principle">KISS principle</a> and the old UNIX pragma 'do one
+thing, and do it well', not that anyone else does nomore.
+
+p. Music is what makes this life worth living. I'm constantly on the lookout for
+new amazing artits. I'm also trying to find new ways to enjoy the music.
+<a href="http://github.com/trapd00r/pimpd">I might have succeeded</a>.
+
+h3. Work
+
+p. I'm currently employed by the local newspaper, doing nothing related to
+programming at all. Would you like to help me change this? Then take a look at
+my <a href="http://japh.se/cv.pdf">Curriclum Vitae</a> [PDF].
+
+h3. Contact
+
+p. The best way to contact me would be by sending me an email. I'd accept XMPP
+requests as well, though. See the bottom of this page.
+
 </div>
 
 
 <div id="related">
   <h3>Somewhat Related Posts</h3>
   <ul class="posts">
-    
-      <li>&raquo; <a href="/all/perl/2010/06/30/The-quest-for-The-Element/">The quest for The Element</a></li>
-    
-      <li>&raquo; <a href="/all/code/2010/07/12/remote-controlled-mplayer-daemon/">Remote Mplayer Client/Daemon</a></li>
-    
-      <li>&raquo; <a href="/all/os/2010/10/03/24bit-colordepth-in-a-terminal-near-you/">24bit colordepth in a terminal near you</a></li>
     
   </ul>
 </div>

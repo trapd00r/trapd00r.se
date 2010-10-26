@@ -1,0 +1,36 @@
+---
+layout: post
+title: "Magnus Woldrich"
+---
+
+h2. {{ page.title }}
+
+
+h3. JAPH
+
+p. Yes, that's right. *Just Another Perl Hacker*.
+
+p. I consider myself a free software advocate, hacker and geek. Besides reading
+perldoc I enjoy writing Perl code and fixing other peoples bad Perl code.
+
+p. I also enjoy system administration (GNU/Linux, BSD), and I'm quite fluent in the
+shell. I enjoy it even more if there's a recent Perl version installed, since
+that allows me to cheat.
+
+p. I'm trying to live by the <a href="http://en.wikipedia.org/wiki/KISS_principle">KISS principle</a> and the old UNIX pragma 'do one
+thing, and do it well', not that anyone else does nomore.
+
+p. Music is what makes this life worth living. I'm constantly on the lookout for
+new amazing artits. I'm also trying to find new ways to enjoy the music.
+<a href="http://github.com/trapd00r/pimpd">I might have succeeded</a>.
+
+h3. Work
+
+p. I'm currently employed by the local newspaper, doing nothing related to
+programming at all. Would you like to help me change this? Then take a look at
+my <a href="http://japh.se/cv.pdf">Curriclum Vitae</a> [PDF].
+
+h3. Contact
+
+p. The best way to contact me would be by sending me an email. I'd accept XMPP
+requests as well, though. See the bottom of this page.
