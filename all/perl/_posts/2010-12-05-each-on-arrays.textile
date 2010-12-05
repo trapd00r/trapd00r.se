@@ -1,0 +1,66 @@
+---
+layout: post
+title: "each() on arrays"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 05 December 2010
+
+p. With the fairly new Perl 5.12, each() now accepts an array, as opposed to
+only a hash.
+
+p. each returns a 2 element list, containing the key and value for the next
+element in a hash, and now, in an array as well.
+In addition to the usual:
+
+{%highlight perl%}
+
+my %hash = (
+  foo => 12,
+  bar => 42,
+);
+
+while( my($key, $value) = each(%hash) ) {
+  print "$key => $value\n";
+}
+
+{% endhighlight %}
+
+we can also do this:
+
+{%highlight perl%}
+
+my @array = ('a' .. 'z');
+
+while( my($index, $element) = each(@array) ) {
+  print "$index: $element\n";
+}
+
+{%endhighlight%}
+
+The index is the key, and the element itself is the value.
+This means we can do things like:
+
+{%highlight perl%}
+
+while( my($i, $e) = each(@array)) {
+  print "\$array[$i] = $e\n" if $e eq 'm';
+}
+
+{%endhighlight%}
+
+instead of manually keeping count:
+
+{%highlight perl%}
+
+my $i = 0;
+
+for my $e(@array) {
+  if($e eq 'm') {
+    print "\$array[$i] = $e\n";
+  }
+  $i++;
+}
+
+{%endhighlight%}
