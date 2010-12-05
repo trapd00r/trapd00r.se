@@ -1,0 +1,149 @@
+---
+layout: post
+title: "Term::ExtendedColor"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 05 December 2010
+
+<a href="http://search.cpan.org/~woldrich/Term-ExtendedColor-0.166/"><b>CPAN</b></a> (stable release) || <a href="https://github.com/trapd00r/Term-ExtendedColor"><b> GIT</b></a> (dev release)
+
+<p>
+If you want to colorize screen output in your programs, chances are you've encountered the core <a href="http://search.cpan.org/~rra/ANSIColor-3.00/">Term::ANSIColor</a> module.
+
+It works just as expected, which means it deals with the standard ANSI colors.
+Nowadays, most terminals support the extended colorset as well, and I was quite surprised there wasn't a module dealing with this already.
+
+As of today, it's really hard to find a terminal that <b>does not</b> support these extended colors.
+
+{%highlight bash%}
+256 colors supported
+----------------------
+eterm
+gnome-terminal
+konsole
+lxterminal
+mrxvt
+roxterm
+rxvt-unicode
+sakura
+terminal
+terminator
+vte
+xterm
+
+GNU Screen
+tmux
+
+Not supported
+---------------------
+aterm
+rxvt
+TTY/VC
+{%endhighlight%}
+
+</p>
+
+<p>
+
+The biggest obstacle I encountered was how to name the colors.
+With a total of 240 additional colors with about 30 shades of green, 20 shades of yellow and so on, it wasn't obvious.
+
+My first thought was to map them against some standard color names, like the <a href="http://en.wikipedia.org/wiki/Web_colors">HTML</a> or <a href="http://www.december.com/html/spec/colorsvg.html">SVG</a> ones. They didn't match.
+
+Then I thought of the <a href="http://en.wikipedia.org/wiki/X11_color_names">X11 color names</a> - they surely must match!
+They didn't.
+
+So the solution was pretty simple - create one table per base color ( green, blue, yellow ), make the brightest shade the first element and name the colors by their base color plus index.
+
+If you happen to know of a better way to solve this, please<a href="http://trapd00r.se/about.html"> let me know</a>.
+
+The interface is almost identical to the functional interface from Term::ANSIColor, with a few exceptions.
+
+First, there's no need to separate a <b>color()</b> and <b>colored()</b> function.
+
+{%highlight perl%}
+
+=for autoreset(1)
+
+Autoreset is enabled by default.
+Every string you apply an attribute to also gets the 'reset' attribute attached to it.
+
+=cut
+
+my $colored_text = fg('blue2', 'This is blue');
+$colored_text .= " while this isn't.";
+
+=for autoreset(0)
+
+There are times where you might want to disable autoreset.
+
+=cut
+
+Term::ExtendedColor::autoreset(0);
+
+my $blue = fg('blue4', 'This is blue');
+print fg('bold', "This is bold and blue"), "\n";
+
+{%endhighlight%}
+
+Second, two separate functions are exported to deal with foreground and background attributes.
+
+{%highlight perl%}
+
+my $green_fg = fg('green3', 'This is green foreground');
+my $grey_bg  = bg('grey10', 'This is default foreground on grey background');
+
+my $blue_on_red = fg('blue1', bg('red4', 'Blue text on red background'));
+
+{%endhighlight%}
+
+The <b>colorstrip()</b> function in Term::ANSIColor is called <b>uncolor()</b>.
+
+{%highlight perl%}
+
+my $colored = fg('red1', fg('bold', bg('blue2', 'Lots of attributes')));
+print uncolored($colored); # Normal text
+
+{%endhighlight%}
+
+<b>set_color()</b> allows you to <i>change</i> mapped colors, ANSI as well as the extended ones.
+This is the same technique that's used in <a href="https://github.com/trapd00r/colorcoke">colorcoke</a>.
+
+{%highlight perl%}
+
+# Change the first ANSI color (usually black) to red
+print set_color(0, 'ff0000');
+# Change extended color 196 (#ff0000) to yellow
+print set_color(196, 'ffff00');
+
+{%endhighlight%}
+
+<b>get_colors()</b> returns a hash reference with all available colors:
+
+{%highlight perl%}
+
+my $colors = get_colors();
+
+for my $c(sort(keys(%{$colors}))) {
+  print "$c\n";
+
+  # Or, print them in their respective color
+  print fg($c, $c), "\n";
+}
+
+{%endhighlight%}
+
+<b>lookup()</b> allows you to lookup a color by their index.
+
+{%highlight perl%}
+
+for(0..255) {
+  my $color_str = lookup($_);
+  if(defined($color_str)) {
+    printf("%25s => %s\n", fg($color_str, $color_str), $_);
+  }
+}
+
+{%endhighlight%}

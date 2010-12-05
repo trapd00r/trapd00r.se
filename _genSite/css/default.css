@@ -2,8 +2,8 @@ body {
   background: #121212;
   color:#e5e5e5;
   font-family: 'lucida grande','lucida sans unicode',Verdana,Tahoma,Arial,sans-serif;
-  font-size:0.9em;
-  line-height:1.2em;
+  font-size:12px;
+  line-height:1.2px;
   margin:0 auto;
   padding:0;
 }
@@ -32,7 +32,7 @@ p {
 }
 
 ul,ol,dl {
-  font-size:1em;
+  font-size:10px;
   margin:1px 0 16px 0px;
   color: #f4ea05;
 }
@@ -68,7 +68,7 @@ div#post ul li {
 blockquote {
   border-left:8px solid #0383c9;
   background: #474747;
-  font-size:1.0em;
+  font-size:10px;
   margin:20px 10px;
   padding:10px;
   padding-left:20px;
@@ -92,7 +92,7 @@ pre {
   */
   font-family: Terminus, Monaco, Courier, Monospace;
   background: #121212;
-  font-size: 1.05em;
+  font-size: 10px;
   /*font-weight: bold; */
   line-height: 120%;
   padding-top: 0.2em;
@@ -120,7 +120,7 @@ pre {
 }
 
 .im {
-  font-size:0.95em;
+  font-size:10px;
   line-height: 1.4em;
   width: 650px;
   font-family: 'lucida grande','lucida sans','lucida sans unicode',helvetica,tahoma;
