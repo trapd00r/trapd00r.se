@@ -31,3 +31,39 @@ p. Use *hash -r* (bash) or *rehash* (zsh), and the PATH will be rehashed for exe
 $ which colorcoke
 /usr/lib/perl5/site_perl/bin/colorcoke
 {% endhighlight %}
+
+
+
+*UPDATE*
+
+p. I just talked to <a href="http://allanmcrae.com/">Allan McRae</a> on this issue.
+The reason why Perl executables are installed in */usr/lib/...* is because subdirectories in */usr/bin* are not allowed by the <a href="http://www.pathname.com/fhs/">Filesystem Hierarchy Standard</a>.
+
+p. The script that's supposed to update the PATH only works if the directories does exist.
+The first time a user will install a package containing Perl executeables, those
+directories will be created, but the PATH wont be updated until the next time that file is sourced (probably the next time the user logs in).
+
+p. I suggested to skip those checks and just add the directories to the PATH anyway, but <a href="https://bugs.archlinux.org/task/17402">apparently</a> that will create other problems.
+
+Therefore I submitted a <a href="https://bugs.archlinux.org/task/22197">bug rapport</a> on the matter, and the solution is pretty simple:
+
+{%highlight bash%}
+
+# Set path to perl scripts.
+# Remove the perlbin dirs in the next release.
+
+# Create directories and and them to the PATH.
+
+mkdir -p /usr/lib/perl5/{site,vendor,core}_perl/bin &&
+  PATH=$PATH:/usr/lib/perl5/site_perl/bin
+  PATH=$PATH:/usr/lib/perl5/vendor_perl/bin
+  PATH=$PATH:/usr/lib/perl5/core_perl/bin
+
+export PATH
+
+# If you have modules in non-standard directories you can add them here.
+#export PERLLIB=dir1:dir2
+
+{%endhighlight%}
+
+Hopefully, this will be solved pretty fast.
