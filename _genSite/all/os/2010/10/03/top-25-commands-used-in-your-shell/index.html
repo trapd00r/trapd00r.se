@@ -36,77 +36,16 @@
 <h2>Top 25 commands used in your shell</h2>
 <p class="publish_date">03 October 2010</p>
 <h3>Bash version for Bash</h3>
-<div class="highlight"><pre><code class="bash"><span class="nb">history</span> |
-  awk <span class="s1">&#39;{print $2}&#39;</span>| 
-  awk <span class="s1">&#39;BEGIN {FS=&quot;|&quot;} {print $1}&#39;</span> |
-  sort | 
-  uniq -c |
-  sort -rn |
-  head -25
-</code></pre>
-</div><h3>Bash version for Zsh</h3>
-<div class="highlight"><pre><code class="bash"><span class="se">\c</span>at <span class="nv">$HOME</span>/.zsh-history |
-  perl -pe <span class="s1">&#39;s/^: [0-9]+:[0-9]+;\s*//&#39;</span> |
-  sort |
-  uniq -c |
-  sort -n -k1 |
-  tail -25 |
-  tac
-</code></pre>
-</div><h3>Perl version for Zsh</h3>
-<div class="highlight"><pre><code class="perl"><span class="c1">#!/usr/bin/perl</span>
-<span class="k">use</span> <span class="n">strict</span><span class="p">;</span>
+</notextile>
 
-<span class="k">my</span> <span class="nv">$history</span> <span class="o">=</span> <span class="nb">shift</span> <span class="sr">//</span> <span class="s">&quot;$ENV{HOME}/.zsh-history&quot;</span><span class="p">;</span>
-<span class="k">my</span> <span class="nv">$count</span>   <span class="o">=</span> <span class="nb">shift</span> <span class="sr">//</span> <span class="mi">25</span><span class="p">;</span>
+h3. Bash version for Zsh
 
-<span class="nb">open</span><span class="p">(</span><span class="k">my</span> <span class="nv">$fh</span><span class="p">,</span> <span class="s">&#39;&lt;&#39;</span><span class="p">,</span> <span class="nv">$history</span><span class="p">)</span> <span class="ow">or</span> <span class="k">print</span> <span class="bp">STDERR</span> <span class="s">&quot;$!&quot;</span> <span class="ow">and</span> <span class="nb">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-<span class="nb">chomp</span><span class="p">(</span><span class="k">my</span> <span class="nv">@records</span> <span class="o">=</span> <span class="s-Regexp">&lt;$fh&gt;</span><span class="p">);</span>
-<span class="nb">close</span><span class="p">(</span><span class="nv">$fh</span><span class="p">);</span>
+<notextile><h3>Perl version for Zsh</h3>
+</notextile>
 
-<span class="k">my</span> <span class="nv">%commands</span> <span class="o">=</span> <span class="p">();</span>
+h4. Example output
 
-<span class="k">for</span><span class="p">(</span><span class="nv">@records</span><span class="p">)</span> <span class="p">{</span>
-  <span class="sr">s/^:\s+[0-9]+:[0-9]+;//</span><span class="p">;</span>
-  <span class="nv">$commands</span><span class="p">{</span><span class="nv">$_</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="k">for</span><span class="p">(</span><span class="nb">sort</span> <span class="p">{</span> <span class="nv">$commands</span><span class="p">{</span><span class="nv">$b</span><span class="p">}</span> <span class="s-Regexp">&lt;=&gt;</span> <span class="nv">$commands</span><span class="p">{</span><span class="nv">$a</span><span class="p">}</span> <span class="p">}</span> <span class="nb">keys</span><span class="p">(</span><span class="nv">%commands</span><span class="p">))</span> <span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span><span class="nv">$count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nb">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="nb">printf</span><span class="p">(</span><span class="s">&quot;% 4d =&gt; %s\n&quot;</span><span class="p">,</span> <span class="nv">$commands</span><span class="p">{</span><span class="nv">$_</span><span class="p">},</span> <span class="nv">$_</span><span class="p">);</span>
-  <span class="nv">$count</span><span class="o">--</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre>
-</div><h4>Example output</h4>
-<div class="highlight"><pre><code class="bash"> <span class="nv">641</span> <span class="o">=</span>&gt; :q
- <span class="nv">314</span> <span class="o">=</span>&gt; ls
- <span class="nv">107</span> <span class="o">=</span>&gt; scx
-  <span class="nv">84</span> <span class="o">=</span>&gt; getmail
-  <span class="nv">83</span> <span class="o">=</span>&gt; colorcoke --random -s 0 -e 15 <span class="o">&amp;&amp;</span> showcolors
-  <span class="nv">82</span> <span class="o">=</span>&gt; p
-  <span class="nv">73</span> <span class="o">=</span>&gt; clear
-  <span class="nv">72</span> <span class="o">=</span>&gt; cc256
-  <span class="nv">72</span> <span class="o">=</span>&gt; su
-  <span class="nv">56</span> <span class="o">=</span>&gt; u
-  <span class="nv">54</span> <span class="o">=</span>&gt; d
-  <span class="nv">53</span> <span class="o">=</span>&gt; dvdc
-  <span class="nv">50</span> <span class="o">=</span>&gt; t
-  <span class="nv">49</span> <span class="o">=</span>&gt; perl pwc.pl
-  <span class="nv">49</span> <span class="o">=</span>&gt; ..
-  <span class="nv">42</span> <span class="o">=</span>&gt; top20
-  <span class="nv">37</span> <span class="o">=</span>&gt; perl gitupd.pl /home/scp1/Git
-  <span class="nv">37</span> <span class="o">=</span>&gt; lxappearance
-  <span class="nv">35</span> <span class="o">=</span>&gt; pdf
-  <span class="nv">33</span> <span class="o">=</span>&gt; perl pimpd -sh
-  <span class="nv">33</span> <span class="o">=</span>&gt; c256
-  <span class="nv">31</span> <span class="o">=</span>&gt; perl pimpd -cpl
-  <span class="nv">30</span> <span class="o">=</span>&gt; jekyll --server
-  <span class="nv">30</span> <span class="o">=</span>&gt; vim pimpd
-  <span class="nv">29</span> <span class="o">=</span>&gt; perl gitupd.pl /home/scp1/Git/
-</code></pre>
-</div>
+<notextile>
 </div>
 
 

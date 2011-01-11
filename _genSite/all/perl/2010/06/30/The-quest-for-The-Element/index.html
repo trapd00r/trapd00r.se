@@ -49,61 +49,35 @@ There Is More Than One Way To Do It
 <p>If you simply need to know if an element exists, you can use the smart-match<br />
 operator introduced in Perl 5.10:</p>
 </p>
-<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">@array</span> <span class="o">=</span> <span class="sx">qw(foo bar baz)</span><span class="p">;</span>
-<span class="k">print</span> <span class="mi">1</span> <span class="k">if</span> <span class="s">&#39;bar&#39;</span> <span class="o">~~</span> <span class="nv">@c</span><span class="p">;</span>
-</code></pre>
-</div><p>
-<p>If you need to grab the first element that matches evaluated pattern, you can<br />
-use the &#8216;first&#8217; function from the core List::Util module:</p>
+</notextile>
+
+<p>
+If you need to grab the first element that matches evaluated pattern, you can
+use the 'first' function from the core List::Util module:
 </p>
-<div class="highlight"><pre><code class="perl"><span class="k">use</span> <span class="nn">List::</span><span class="n">Util</span> <span class="s">&#39;first&#39;</span><span class="p">;</span>
-<span class="k">my</span> <span class="nv">@array</span> <span class="o">=</span> <span class="sx">qw(foo bar baz)</span><span class="p">;</span>
-<span class="k">print</span> <span class="n">first</span><span class="p">{</span><span class="sr">m/ba./</span><span class="p">}</span> <span class="nv">@array</span><span class="p">;</span> <span class="c1"># will print &#39;bar&#39;</span>
-</code></pre>
-</div><p>
+
+<notextile><p>
 <p>You are not limited to regular expressions, either:</p>
 </p>
-<div class="highlight"><pre><code class="perl"><span class="k">use</span> <span class="nn">Data::</span><span class="n">Dumper</span><span class="p">;</span>
-<span class="k">use</span> <span class="nn">List::</span><span class="n">Util</span> <span class="s">&#39;first&#39;</span><span class="p">;</span>
-<span class="k">my</span> <span class="nv">@array</span> <span class="o">=</span> <span class="p">(</span><span class="nb">undef</span><span class="p">,</span> <span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="nb">undef</span><span class="p">,</span> <span class="s">&#39;bar&#39;</span><span class="p">);</span>
-<span class="k">print</span> <span class="n">Dumper</span> <span class="n">first</span><span class="p">{</span><span class="o">!</span><span class="nb">defined</span><span class="p">(</span><span class="nv">$_</span><span class="p">)};</span> <span class="c1"># $VAR1 = undef;</span>
-<span class="k">print</span> <span class="n">Dumper</span> <span class="n">first</span><span class="p">{</span><span class="nb">defined</span><span class="p">(</span><span class="nv">$_</span><span class="p">)};</span>  <span class="c1"># $VAR1 = &#39;foo&#39;;</span>
+</notextile>
 
-<span class="k">my</span> <span class="nv">@ints</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">15</span><span class="p">);</span>
-<span class="k">print</span> <span class="n">first</span><span class="p">{</span><span class="nv">$_</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">}</span> <span class="nv">@ints</span><span class="p">;</span> <span class="c1"># 11</span>
-</code></pre>
-</div><p>
-<p>The first function works on hashes as well, and maybe it&#8217;s <strong>first</strong> here were we&#8217;ll<br />
-see how useful it can be.</p>
-<p>Instead of manually looping through the hash if you&#8217;re interested in the key for<br />
-a specific value, you can do it like this:</p>
+<p>
+The first function works on hashes as well, and maybe it's *first* here were we'll
+see how useful it can be. 
+
+Instead of manually looping through the hash if you're interested in the key for
+a specific value, you can do it like this:
 </p>
-<div class="highlight"><pre><code class="perl"><span class="k">use</span> <span class="nn">List::</span><span class="n">Util</span> <span class="s">&#39;first&#39;</span><span class="p">;</span>
-<span class="k">my</span> <span class="nv">%hash</span> <span class="o">=</span> <span class="p">(</span>
-  <span class="n">foo</span>  <span class="o">=&gt;</span> <span class="s">&#39;bar&#39;</span><span class="p">,</span>
-  <span class="n">perl</span> <span class="o">=&gt;</span> <span class="s">&#39;awesome&#39;</span><span class="p">,</span>
-<span class="p">);</span>
 
-<span class="c1"># print the first key that responds to the value of &#39;awesome&#39;</span>
-<span class="k">print</span> <span class="n">first</span><span class="p">{</span><span class="nv">$hash</span><span class="p">{</span><span class="nv">$_</span><span class="p">}</span> <span class="ow">eq</span> <span class="s">&#39;awesome&#39;</span><span class="p">}</span> <span class="nv">@hash</span><span class="p">;</span> <span class="c1"># prints &#39;perl&#39;</span>
-<span class="c1"># print the first key which length is more or equal to four</span>
-<span class="k">print</span> <span class="n">first</span><span class="p">{</span><span class="nb">length</span><span class="p">(</span><span class="nv">$hash</span><span class="p">{</span><span class="nv">$_</span><span class="p">})</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">}</span> <span class="nv">%hash</span><span class="p">;</span> <span class="c1"># prints &#39;perl&#39;</span>
-</code></pre>
-</div><p>
+<notextile><p>
 <p>So the <b>first</b> function is pretty useful, but it wont do any good if we&#8217;re<br />
 interested in several values. Here is where <b>grep</b> comes in to play.</p>
 <p>Those that are familiar with the <b>grep</b> command from Gnu/Linux and <span class="caps">UNIX</span><br />
 environments  are probably using it everyday, and for good reason.</p>
 <p><b>grep()</b> in Perl is not the same, but similar in spirit. Let&#8217;s take a look:</p>
 </p>
-<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">@numbers</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">15</span><span class="p">);</span>
-<span class="k">print</span> <span class="s">&quot;$_\n&quot;</span> <span class="k">for</span><span class="p">(</span><span class="nb">grep</span><span class="p">(</span><span class="nv">$_</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="nv">@numbers</span><span class="p">));</span> <span class="c1"># prints 6..15</span>
-
-<span class="k">my</span> <span class="nv">@shuffled</span> <span class="o">=</span> <span class="sx">qw(4 foo 593 bar 22)</span><span class="p">;</span>
-<span class="c1"># Grab the numbers</span>
-<span class="k">print</span> <span class="s">&quot;$_\n&quot;</span> <span class="k">for</span><span class="p">(</span><span class="nb">grep</span><span class="p">{</span><span class="sr">/\d+/</span><span class="p">}</span> <span class="nv">@shuffled</span><span class="p">;</span>   <span class="c1"># prints 4, 593, 22</span>
-</code></pre>
-</div><p>
+<p></notextile></p>
+<p>
 <p><i>Sidenote</i>: \d matches a single character that&#8217;s considered to be a digit.<br />
 Digits are not necessarily 0-9 &#8211; it depends on the encoding of the source string<br />
 and the <span class="caps">LOCALE</span> that&#8217;s in effect. It&#8217;ll happily match indian devanagardi numerals<br />

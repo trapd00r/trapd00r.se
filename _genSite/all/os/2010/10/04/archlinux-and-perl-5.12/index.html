@@ -38,41 +38,29 @@
 <p>The upgrade from Perl 5.10 to 5.12.1 in Arch have caused a lot of headache. I had to manually rebuild almost 600 modules and a lot of regular users are frustrated due to the suddenly changed perl-bin-path, from the sane <strong>/usr/bin/perlbin</strong> path to hiding them in <strong>/usr/lib</strong>. What the fuck&#8230;</p>
 <p>I&#8217;ve searched, asked and questioned this decision for a couple of months now, to no avail. The path problem isn&#8217;t hard to fix, though.</p>
 <p>First, use <strong>pacman</strong> to see where it actually installed things:</p>
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>pacman -Ql colorcoke-git|grep bin
-colorcoke-git /usr/lib/perl5/vendor_perl/bin/
-colorcoke-git /usr/lib/perl5/vendor_perl/bin/colorcoke
-</code></pre>
-</div><p>Right. Add that (and the other missing dirs as well) to your $<span class="caps">PATH</span> in .bashrc or similar.</p>
-<div class="highlight"><pre><code class="bash"><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/lib/perl5/vendor_perl/bin:/usr/lib/perl5/core_perl/bin:/usr/lib/perl5/site_perl/bin
-</code></pre>
-</div><p>Use <strong>hash -r</strong> (bash) or <strong>rehash</strong> (zsh), and the <span class="caps">PATH</span> will be rehashed for executables.</p>
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>which colorcoke
-/usr/lib/perl5/site_perl/bin/colorcoke
-</code></pre>
-</div><p><strong><span class="caps">UPDATE</span></strong></p>
-<p>I just talked to <a href="http://allanmcrae.com/">Allan McRae</a> on this issue.<br />
-The reason why Perl executables are installed in <strong>/usr/lib/&#8230;</strong> is because subdirectories in <strong>/usr/bin</strong> are not allowed by the <a href="http://www.pathname.com/fhs/">Filesystem Hierarchy Standard</a>.</p>
-<p>The script that&#8217;s supposed to update the <span class="caps">PATH</span> only works if the directories does exist.<br />
-The first time a user will install a package containing Perl executeables, those<br />
-directories will be created, but the <span class="caps">PATH</span> wont be updated until the next time that file is sourced (probably the next time the user logs in).</p>
-<p>I suggested to skip those checks and just add the directories to the <span class="caps">PATH</span> anyway, but <a href="https://bugs.archlinux.org/task/17402">apparently</a> that will create other problems.</p>
-<p>Therefore I submitted a <a href="https://bugs.archlinux.org/task/22197">bug rapport</a> on the matter, and the solution is pretty simple:</p>
-<div class="highlight"><pre><code class="bash"><span class="c"># Set path to perl scripts.</span>
-<span class="c"># Remove the perlbin dirs in the next release.</span>
+</notextile>
 
-<span class="c"># Create directories and and them to the PATH.</span>
+p. Right. Add that (and the other missing dirs as well) to your $PATH in .bashrc or similar.
 
-mkdir -p /usr/lib/perl5/<span class="o">{</span>site,vendor,core<span class="o">}</span>_perl/bin <span class="o">&amp;&amp;</span>
-  <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/lib/perl5/site_perl/bin
-  <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/lib/perl5/vendor_perl/bin
-  <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/lib/perl5/core_perl/bin
+<notextile><p>Use <strong>hash -r</strong> (bash) or <strong>rehash</strong> (zsh), and the <span class="caps">PATH</span> will be rehashed for executables.</p>
+</notextile>
 
-<span class="nb">export </span>PATH
 
-<span class="c"># If you have modules in non-standard directories you can add them here.</span>
-<span class="c">#export PERLLIB=dir1:dir2</span>
-</code></pre>
-</div><p>Hopefully, this will be solved pretty fast.</p>
+
+*UPDATE*
+
+p. I just talked to <a href="http://allanmcrae.com/">Allan McRae</a> on this issue.
+The reason why Perl executables are installed in */usr/lib/...* is because subdirectories in */usr/bin* are not allowed by the <a href="http://www.pathname.com/fhs/">Filesystem Hierarchy Standard</a>.
+
+p. The script that's supposed to update the PATH only works if the directories does exist.
+The first time a user will install a package containing Perl executeables, those
+directories will be created, but the PATH wont be updated until the next time that file is sourced (probably the next time the user logs in).
+
+p. I suggested to skip those checks and just add the directories to the PATH anyway, but <a href="https://bugs.archlinux.org/task/17402">apparently</a> that will create other problems.
+
+Therefore I submitted a <a href="https://bugs.archlinux.org/task/22197">bug rapport</a> on the matter, and the solution is pretty simple:
+
+<notextile><p>Hopefully, this will be solved pretty fast.</p>
 </div>
 
 

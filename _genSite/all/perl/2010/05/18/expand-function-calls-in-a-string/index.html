@@ -37,12 +37,11 @@
 <p class="publish_date">18 May 2010</p>
 <p> Normally when one wants to add a function call to a string variable,<br />
 the concatation operator &#8216;.&#8217; is used;</p>
-<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">$foo</span> <span class="o">=</span> <span class="s">&#39;the time is -&gt;&#39;</span><span class="o">.</span><span class="nb">scalar</span><span class="p">(</span><span class="nb">localtime</span><span class="p">)</span><span class="o">.</span><span class="s">&#39; &lt;- the time is&#39;</span><span class="p">;</span>
-</code></pre>
-</div><p>Little known is the fact that you can expand calls directly in a string:</p>
-<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">$foo</span> <span class="o">=</span> <span class="s">&quot;the time is -&gt; @{[scalar(localtime)]} &lt;- the time is&quot;</span><span class="p">;</span>
-</code></pre>
-</div>
+</notextile>
+
+<p>Little known is the fact that you can expand calls directly in a string:</p>
+
+<notextile>
 </div>
 
 

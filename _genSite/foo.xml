@@ -1,0 +1,198 @@
+http://japh.se/all/code/2010/06/07/perl-interface-for-the-music-player-daemon
+http://japh.se/all/code/2010/06/07/radio-playing-daemon
+http://japh.se/all/code/2010/06/26/mplayerd
+http://japh.se/all/code/2010/07/12/remote-controlled-mplayer-daemon
+http://japh.se/all/code/2010/07/12/remote-mplayer-controlling-daemon
+http://japh.se/all/me/2010/09/30/knack-portkoder-med-tetris
+http://japh.se/all/me/2010/09/30/knäck-portkoder-med-tetris
+http://japh.se/all/me/2010/09/30/portkoder-tetris
+http://japh.se/all/os/2010/05/18/but-how-do-i-add-a-user
+http://japh.se/all/os/2010/05/19/control-firefox-remotely
+http://japh.se/all/os/2010/05/21/radio-playing-daemon
+http://japh.se/all/os/2010/05/30/rmshit-solves-annoying-Desktop-(et-al)-creation
+http://japh.se/all/os/2010/06/04/GNU-Screen-hardstatus-fun
+http://japh.se/all/os/2010/08/10/reset-high-speed-USB-device-using-ehci_hcd-Solution
+http://japh.se/all/os/2010/10/03/24bit-colordepth-in-a-terminal-near-you
+http://japh.se/all/os/2010/10/03/top-25-commands-used-in-your-shell
+http://japh.se/all/os/2010/10/03/user-configurable-extended-colorspace
+http://japh.se/all/os/2010/10/04/archlinux-and-perl-5.12
+http://japh.se/all/os/2010/10/18/about
+http://japh.se/all/perl/2010/05/18/expand-function-calls-in-a-string
+http://japh.se/all/perl/2010/06/18/exxxxxxand-function-calls-in-a-string
+http://japh.se/all/perl/2010/06/30/Search-for-elements
+http://japh.se/all/perl/2010/06/30/The-quest-for-The-Element
+http://japh.se/all/perl/2010/12/05/Term::ExtendedColor
+http://japh.se/all/perl/2010/12/05/each-on-arrays
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns="http://purl.org/rss/1.0/"
+ xmlns:content="http://purl.org/rss/1.0/modules/content/"
+ xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:syn="http://purl.org/rss/1.0/modules/syndication/"
+ xmlns:admin="http://webns.net/mvcb/"
+>
+
+<channel rdf:about="http://japh.se">
+<title>japh.se</title>
+<link>http://japh.se</link>
+<description>foo bar</description>
+<dc:language>en-us</dc:language>
+<items>
+ <rdf:Seq>
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/os/2010/10/18/about&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/os/2010/10/04/archlinux-and-perl-5.12&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/os/2010/10/03/24bit-colordepth-in-a-terminal-near-you&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/os/2010/10/03/top-25-commands-used-in-your-shell&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/os/2010/10/03/user-configurable-extended-colorspace&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/os/2010/06/04/GNU-Screen-hardstatus-fun&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/os/2010/08/10/reset-high-speed-USB-device-using-ehci_hcd-Solution&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/os/2010/05/19/control-firefox-remotely&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/os/2010/05/21/radio-playing-daemon&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/os/2010/05/30/rmshit-solves-annoying-Desktop-(et-al)-creation&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/os/2010/05/18/but-how-do-i-add-a-user&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/me/2010/09/30/kn&#xC3;&#xA4;ck-portkoder-med-tetris&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/me/2010/09/30/portkoder-tetris&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/me/2010/09/30/knack-portkoder-med-tetris&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/code/2010/07/12/remote-controlled-mplayer-daemon&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/code/2010/07/12/remote-mplayer-controlling-daemon&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/code/2010/06/26/mplayerd&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/code/2010/06/07/perl-interface-for-the-music-player-daemon&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/code/2010/06/07/radio-playing-daemon&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/perl/2010/12/05/each-on-arrays&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/perl/2010/12/05/Term::ExtendedColor&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/perl/2010/06/30/The-quest-for-The-Element&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/perl/2010/06/30/Search-for-elements&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/perl/2010/06/18/exxxxxxand-function-calls-in-a-string&#x27;" />
+  <rdf:li rdf:resource="&#x27;http://japh.se/all/perl/2010/05/18/expand-function-calls-in-a-string&#x27;" />
+ </rdf:Seq>
+</items>
+</channel>
+<item rdf:about="&#x27;http://japh.se/all/os/2010/10/18/about&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/os/2010/10/18/about&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/os/2010/10/04/archlinux-and-perl-5.12&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/os/2010/10/04/archlinux-and-perl-5.12&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/os/2010/10/03/24bit-colordepth-in-a-terminal-near-you&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/os/2010/10/03/24bit-colordepth-in-a-terminal-near-you&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/os/2010/10/03/top-25-commands-used-in-your-shell&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/os/2010/10/03/top-25-commands-used-in-your-shell&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/os/2010/10/03/user-configurable-extended-colorspace&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/os/2010/10/03/user-configurable-extended-colorspace&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/os/2010/06/04/GNU-Screen-hardstatus-fun&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/os/2010/06/04/GNU-Screen-hardstatus-fun&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/os/2010/08/10/reset-high-speed-USB-device-using-ehci_hcd-Solution&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/os/2010/08/10/reset-high-speed-USB-device-using-ehci_hcd-Solution&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/os/2010/05/19/control-firefox-remotely&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/os/2010/05/19/control-firefox-remotely&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/os/2010/05/21/radio-playing-daemon&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/os/2010/05/21/radio-playing-daemon&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/os/2010/05/30/rmshit-solves-annoying-Desktop-(et-al)-creation&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/os/2010/05/30/rmshit-solves-annoying-Desktop-(et-al)-creation&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/os/2010/05/18/but-how-do-i-add-a-user&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/os/2010/05/18/but-how-do-i-add-a-user&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/me/2010/09/30/kn&#xC3;&#xA4;ck-portkoder-med-tetris&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/me/2010/09/30/kn&#xC3;&#xA4;ck-portkoder-med-tetris&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/me/2010/09/30/portkoder-tetris&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/me/2010/09/30/portkoder-tetris&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/me/2010/09/30/knack-portkoder-med-tetris&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/me/2010/09/30/knack-portkoder-med-tetris&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/code/2010/07/12/remote-controlled-mplayer-daemon&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/code/2010/07/12/remote-controlled-mplayer-daemon&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/code/2010/07/12/remote-mplayer-controlling-daemon&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/code/2010/07/12/remote-mplayer-controlling-daemon&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/code/2010/06/26/mplayerd&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/code/2010/06/26/mplayerd&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/code/2010/06/07/perl-interface-for-the-music-player-daemon&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/code/2010/06/07/perl-interface-for-the-music-player-daemon&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/code/2010/06/07/radio-playing-daemon&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/code/2010/06/07/radio-playing-daemon&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/perl/2010/12/05/each-on-arrays&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/perl/2010/12/05/each-on-arrays&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/perl/2010/12/05/Term::ExtendedColor&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/perl/2010/12/05/Term::ExtendedColor&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/perl/2010/06/30/The-quest-for-The-Element&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/perl/2010/06/30/The-quest-for-The-Element&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/perl/2010/06/30/Search-for-elements&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/perl/2010/06/30/Search-for-elements&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/perl/2010/06/18/exxxxxxand-function-calls-in-a-string&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/perl/2010/06/18/exxxxxxand-function-calls-in-a-string&#x27;</link>
+<description>foobar</description>
+</item>
+<item rdf:about="&#x27;http://japh.se/all/perl/2010/05/18/expand-function-calls-in-a-string&#x27;">
+<title>foobar</title>
+<link>&#x27;http://japh.se/all/perl/2010/05/18/expand-function-calls-in-a-string&#x27;</link>
+<description>foobar</description>
+</item>
+</rdf:RDF>
