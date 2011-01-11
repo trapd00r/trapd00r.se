@@ -40,17 +40,39 @@ only a hash.</p>
 <p>each returns a 2 element list, containing the key and value for the next<br />
 element in a hash, and now, in an array as well.<br />
 In addition to the usual:</p>
-</notextile>
+<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">%hash</span> <span class="o">=</span> <span class="p">(</span>
+  <span class="n">foo</span> <span class="o">=&gt;</span> <span class="mi">12</span><span class="p">,</span>
+  <span class="n">bar</span> <span class="o">=&gt;</span> <span class="mi">42</span><span class="p">,</span>
+<span class="p">);</span>
 
-we can also do this:
+<span class="k">while</span><span class="p">(</span> <span class="k">my</span><span class="p">(</span><span class="nv">$key</span><span class="p">,</span> <span class="nv">$value</span><span class="p">)</span> <span class="o">=</span> <span class="nb">each</span><span class="p">(</span><span class="nv">%hash</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="s">&quot;$key =&gt; $value\n&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div><p>we can also do this:</p>
+<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">@array</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;a&#39;</span> <span class="o">..</span> <span class="s">&#39;z&#39;</span><span class="p">);</span>
 
-<notextile><p>The index is the key, and the element itself is the value.<br />
+<span class="k">while</span><span class="p">(</span> <span class="k">my</span><span class="p">(</span><span class="nv">$index</span><span class="p">,</span> <span class="nv">$element</span><span class="p">)</span> <span class="o">=</span> <span class="nb">each</span><span class="p">(</span><span class="nv">@array</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="s">&quot;$index: $element\n&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div><p>The index is the key, and the element itself is the value.<br />
 This means we can do things like:</p>
-</notextile>
+<div class="highlight"><pre><code class="perl"><span class="k">while</span><span class="p">(</span> <span class="k">my</span><span class="p">(</span><span class="nv">$i</span><span class="p">,</span> <span class="nv">$e</span><span class="p">)</span> <span class="o">=</span> <span class="nb">each</span><span class="p">(</span><span class="nv">@array</span><span class="p">))</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="s">&quot;\$array[$i] = $e\n&quot;</span> <span class="k">if</span> <span class="nv">$e</span> <span class="ow">eq</span> <span class="s">&#39;m&#39;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div><p>instead of manually keeping count:</p>
+<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-instead of manually keeping count:
-
-<notextile>
+<span class="k">for</span> <span class="k">my</span> <span class="nv">$e</span><span class="p">(</span><span class="nv">@array</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nv">$e</span> <span class="ow">eq</span> <span class="s">&#39;m&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">print</span> <span class="s">&quot;\$array[$i] = $e\n&quot;</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
 </div>
 
 
@@ -71,16 +93,22 @@ instead of manually keeping count:
 
   <div id="footer">
     <a href="http://github.com/trapd00r">github</a> ||
-    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> ||
     <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
     <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
     <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
     <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
-    <a href="http://github.com/trapd00r/utils">utils</a>
+    <a href="http://github.com/trapd00r/ls--">ls++</a> ||
+    <a href="http://github.com/trapd00r/xkcd">xkcd</a> <br>
+
+    <a href="http://search.cpan.org/~woldrich/">CPAN releases</a> ||
+    <a href="http://cpan.japh.se">CPAN mirror</a> ||
+    <!-- <a href="http://cpan.japh.se" class="blue">CPAN mirror</a> || -->
+    <a href="http://github.com/trapd00r.se/">Follow this site</a>
 
     <p>
     <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
-    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a></p>
+    <p>&copy; 2011 <a href="/about.html">Magnus Woldrich</a></p>
 
   </div>
 </div>

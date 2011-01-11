@@ -43,15 +43,37 @@ href="http://en.wikipedia.org/wiki/Inotify">inotify</a> to watch your $<span cla
 unwanted files and instantly deletes them. Since it&#8217;s a daemon, you can start<br />
 it at boot time and know that&#8217;ll keep your directories clean.</p>
 <p><strong>To install the dependencies: </strong></p>
-</notextile>
-
-<i>or use your package manager of choice.</i>
-
-<strong>To install rmshit: </strong>
-
-<notextile><p>You might want to edit the <strong>@shittyfiles</strong> array, containing unwanted files and dirs. <br />
+<div class="highlight"><pre><code class="bash">cpan Linux::Inotify2 Working::Daemon
+</code></pre>
+</div><p><i>or use your package manager of choice.</i></p>
+<p><strong>To install rmshit: </strong></p>
+<div class="highlight"><pre><code class="bash">git clone git://github.com/trapd00r/rmshit.git
+<span class="nb">cd </span>rmshit
+perl Makefile.PL
+make
+make install
+</code></pre>
+</div><p>You might want to edit the <strong>@shittyfiles</strong> array, containing unwanted files and dirs. <br />
 It looks like this right now:</p>
-<p></notextile></p>
+<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">@shittyfiles</span> <span class="o">=</span> <span class="sx">qw(.dbus</span>
+<span class="sx">                     .gconf</span>
+<span class="sx">                     .gconfd</span>
+<span class="sx">                     .links</span>
+<span class="sx">                     .lynx</span>
+<span class="sx">                     .local</span>
+<span class="sx">                     .Xauthority</span>
+<span class="sx">                     .dmenu_cache</span>
+<span class="sx">                     .fmenu_cache</span>
+<span class="sx">                     .esd_auth</span>
+<span class="sx">                     .fehrc</span>
+<span class="sx">                     .xsel.log</span>
+<span class="sx">                     .ncmpcpp</span>
+<span class="sx">                     Desktop</span>
+<span class="sx">                     .adobe</span>
+<span class="sx">                     .macromedia</span>
+<span class="sx">                   )</span><span class="p">;</span>
+</code></pre>
+</div>
 </div>
 
 
@@ -72,16 +94,22 @@ It looks like this right now:</p>
 
   <div id="footer">
     <a href="http://github.com/trapd00r">github</a> ||
-    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> ||
     <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
     <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
     <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
     <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
-    <a href="http://github.com/trapd00r/utils">utils</a>
+    <a href="http://github.com/trapd00r/ls--">ls++</a> ||
+    <a href="http://github.com/trapd00r/xkcd">xkcd</a> <br>
+
+    <a href="http://search.cpan.org/~woldrich/">CPAN releases</a> ||
+    <a href="http://cpan.japh.se">CPAN mirror</a> ||
+    <!-- <a href="http://cpan.japh.se" class="blue">CPAN mirror</a> || -->
+    <a href="http://github.com/trapd00r.se/">Follow this site</a>
 
     <p>
     <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
-    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a></p>
+    <p>&copy; 2011 <a href="/about.html">Magnus Woldrich</a></p>
 
   </div>
 </div>

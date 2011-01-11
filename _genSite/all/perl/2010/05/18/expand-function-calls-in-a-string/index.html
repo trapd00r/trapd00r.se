@@ -37,11 +37,12 @@
 <p class="publish_date">18 May 2010</p>
 <p> Normally when one wants to add a function call to a string variable,<br />
 the concatation operator &#8216;.&#8217; is used;</p>
-</notextile>
-
-<p>Little known is the fact that you can expand calls directly in a string:</p>
-
-<notextile>
+<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">$foo</span> <span class="o">=</span> <span class="s">&#39;the time is -&gt;&#39;</span><span class="o">.</span><span class="nb">scalar</span><span class="p">(</span><span class="nb">localtime</span><span class="p">)</span><span class="o">.</span><span class="s">&#39; &lt;- the time is&#39;</span><span class="p">;</span>
+</code></pre>
+</div><p>Little known is the fact that you can expand calls directly in a string:</p>
+<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">$foo</span> <span class="o">=</span> <span class="s">&quot;the time is -&gt; @{[scalar(localtime)]} &lt;- the time is&quot;</span><span class="p">;</span>
+</code></pre>
+</div>
 </div>
 
 
@@ -62,16 +63,22 @@ the concatation operator &#8216;.&#8217; is used;</p>
 
   <div id="footer">
     <a href="http://github.com/trapd00r">github</a> ||
-    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> ||
     <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
     <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
     <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
     <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
-    <a href="http://github.com/trapd00r/utils">utils</a>
+    <a href="http://github.com/trapd00r/ls--">ls++</a> ||
+    <a href="http://github.com/trapd00r/xkcd">xkcd</a> <br>
+
+    <a href="http://search.cpan.org/~woldrich/">CPAN releases</a> ||
+    <a href="http://cpan.japh.se">CPAN mirror</a> ||
+    <!-- <a href="http://cpan.japh.se" class="blue">CPAN mirror</a> || -->
+    <a href="http://github.com/trapd00r.se/">Follow this site</a>
 
     <p>
     <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
-    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a></p>
+    <p>&copy; 2011 <a href="/about.html">Magnus Woldrich</a></p>
 
   </div>
 </div>

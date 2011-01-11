@@ -43,11 +43,14 @@ He was confused how to add a new user though, since <strong>adduser</strong>, <s
 <strong>/etc/passwd</strong> all have the &#8216;d&#8217; char in it.</p>
 </p>
 <p>There&#8217;s a couple more or less interesting ways to solve this.</p>
-</notextile>
-
-<notextile><p> And the little more interesting way&#8230;</p>
-<p></notextile></p>
-<p>
+<div class="highlight"><pre><code class="bash">usera + <span class="o">[</span>tab<span class="o">]</span>
+</code></pre>
+</div><div class="highlight"><pre><code class="bash">/usr/sbin/usera??
+</code></pre>
+</div><p> And the little more interesting way&#8230;</p>
+<div class="highlight"><pre><code class="bash"><span class="k">$(</span>perl -e <span class="s1">&#39;printf(&quot;a%s%suser\n&quot;,  chr(&#39;</span>100<span class="s1">&#39;) x 2);&#39;</span><span class="k">)</span>
+</code></pre>
+</div><p>
 <p>What this does is actually pretty simple.<br />
 We print a &#8216;a&#8217;, two &#8216;d&#8217; using the chr() function, &#8216;user&#8217;, and since we wrapped it<br />
 all in $(), it executes in the shell, and voilá!</p>
@@ -72,16 +75,22 @@ all in $(), it executes in the shell, and voilá!</p>
 
   <div id="footer">
     <a href="http://github.com/trapd00r">github</a> ||
-    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> ||
     <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
     <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
     <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
     <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
-    <a href="http://github.com/trapd00r/utils">utils</a>
+    <a href="http://github.com/trapd00r/ls--">ls++</a> ||
+    <a href="http://github.com/trapd00r/xkcd">xkcd</a> <br>
+
+    <a href="http://search.cpan.org/~woldrich/">CPAN releases</a> ||
+    <a href="http://cpan.japh.se">CPAN mirror</a> ||
+    <!-- <a href="http://cpan.japh.se" class="blue">CPAN mirror</a> || -->
+    <a href="http://github.com/trapd00r.se/">Follow this site</a>
 
     <p>
     <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
-    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a></p>
+    <p>&copy; 2011 <a href="/about.html">Magnus Woldrich</a></p>
 
   </div>
 </div>

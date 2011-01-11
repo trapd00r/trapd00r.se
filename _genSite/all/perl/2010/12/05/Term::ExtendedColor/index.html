@@ -41,41 +41,98 @@
 <p>It works just as expected, which means it deals with the standard <span class="caps">ANSI</span> colors.<br />
 Nowadays, most terminals support the extended colorset as well, and I was quite surprised there wasn&#8217;t a module dealing with this already.</p>
 <p>As of today, it&#8217;s really hard to find a terminal that <b>does not</b> support these extended colors.</p>
-</notextile>
+<div class="highlight"><pre><code class="bash">256 colors supported
+----------------------
+eterm
+gnome-terminal
+konsole
+lxterminal
+mrxvt
+roxterm
+rxvt-unicode
+sakura
+terminal
+terminator
+vte
+xterm
 
-</p>
+GNU Screen
+tmux
 
+Not supported
+---------------------
+aterm
+rxvt
+TTY/VC
+</code></pre>
+</div></p>
 <p>
+<p>The biggest obstacle I encountered was how to name the colors.<br />
+With a total of 240 additional colors with about 30 shades of green, 20 shades of yellow and so on, it wasn&#8217;t obvious.</p>
+<p>My first thought was to map them against some standard color names, like the <a href="http://en.wikipedia.org/wiki/Web_colors"><span class="caps">HTML</span></a> or <a href="http://www.december.com/html/spec/colorsvg.html"><span class="caps">SVG</span></a> ones. They didn&#8217;t match.</p>
+<p>Then I thought of the <a href="http://en.wikipedia.org/wiki/X11_color_names">X11 color names</a> &#8211; they surely must match!<br />
+They didn&#8217;t.</p>
+<p>So the solution was pretty simple &#8211; create one table per base color ( green, blue, yellow ), make the brightest shade the first element and name the colors by their base color plus index.</p>
+<p>If you happen to know of a better way to solve this, please<a href="http://trapd00r.se/about.html"> let me know</a>.</p>
+<p>The interface is almost identical to the functional interface from Term::ANSIColor, with a few exceptions.</p>
+<p>First, there&#8217;s no need to separate a <b>color()</b> and <b>colored()</b> function.</p>
+<div class="highlight"><pre><code class="perl"><span class="cm">=for autoreset(1)</span>
 
-The biggest obstacle I encountered was how to name the colors.
-With a total of 240 additional colors with about 30 shades of green, 20 shades of yellow and so on, it wasn't obvious.
+<span class="cm">Autoreset is enabled by default.</span>
+<span class="cm">Every string you apply an attribute to also gets the &#39;reset&#39; attribute attached to it.</span>
 
-My first thought was to map them against some standard color names, like the <a href="http://en.wikipedia.org/wiki/Web_colors">HTML</a> or <a href="http://www.december.com/html/spec/colorsvg.html">SVG</a> ones. They didn't match.
+<span class="cm">=cut</span>
 
-Then I thought of the <a href="http://en.wikipedia.org/wiki/X11_color_names">X11 color names</a> - they surely must match!
-They didn't.
+<span class="k">my</span> <span class="nv">$colored_text</span> <span class="o">=</span> <span class="n">fg</span><span class="p">(</span><span class="s">&#39;blue2&#39;</span><span class="p">,</span> <span class="s">&#39;This is blue&#39;</span><span class="p">);</span>
+<span class="nv">$colored_text</span> <span class="o">.=</span> <span class="s">&quot; while this isn&#39;t.&quot;</span><span class="p">;</span>
 
-So the solution was pretty simple - create one table per base color ( green, blue, yellow ), make the brightest shade the first element and name the colors by their base color plus index.
+<span class="cm">=for autoreset(0)</span>
 
-If you happen to know of a better way to solve this, please<a href="http://trapd00r.se/about.html"> let me know</a>.
+<span class="cm">There are times where you might want to disable autoreset.</span>
 
-The interface is almost identical to the functional interface from Term::ANSIColor, with a few exceptions.
+<span class="cm">=cut</span>
 
-First, there's no need to separate a <b>color()</b> and <b>colored()</b> function.
+<span class="nn">Term::ExtendedColor::</span><span class="n">autoreset</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-<notextile><p>Second, two separate functions are exported to deal with foreground and background attributes.</p>
-</notextile>
+<span class="k">my</span> <span class="nv">$blue</span> <span class="o">=</span> <span class="n">fg</span><span class="p">(</span><span class="s">&#39;blue4&#39;</span><span class="p">,</span> <span class="s">&#39;This is blue&#39;</span><span class="p">);</span>
+<span class="k">print</span> <span class="n">fg</span><span class="p">(</span><span class="s">&#39;bold&#39;</span><span class="p">,</span> <span class="s">&quot;This is bold and blue&quot;</span><span class="p">),</span> <span class="s">&quot;\n&quot;</span><span class="p">;</span>
+</code></pre>
+</div><p>Second, two separate functions are exported to deal with foreground and background attributes.</p>
+<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">$green_fg</span> <span class="o">=</span> <span class="n">fg</span><span class="p">(</span><span class="s">&#39;green3&#39;</span><span class="p">,</span> <span class="s">&#39;This is green foreground&#39;</span><span class="p">);</span>
+<span class="k">my</span> <span class="nv">$grey_bg</span>  <span class="o">=</span> <span class="n">bg</span><span class="p">(</span><span class="s">&#39;grey10&#39;</span><span class="p">,</span> <span class="s">&#39;This is default foreground on grey background&#39;</span><span class="p">);</span>
 
-The <b>colorstrip()</b> function in Term::ANSIColor is called <b>uncolor()</b>.
-
-<notextile><p><b>set_color()</b> allows you to <i>change</i> mapped colors, <span class="caps">ANSI</span> as well as the extended ones.<br />
+<span class="k">my</span> <span class="nv">$blue_on_red</span> <span class="o">=</span> <span class="n">fg</span><span class="p">(</span><span class="s">&#39;blue1&#39;</span><span class="p">,</span> <span class="n">bg</span><span class="p">(</span><span class="s">&#39;red4&#39;</span><span class="p">,</span> <span class="s">&#39;Blue text on red background&#39;</span><span class="p">));</span>
+</code></pre>
+</div><p>The <b>colorstrip()</b> function in Term::ANSIColor is called <b>uncolor()</b>.</p>
+<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">$colored</span> <span class="o">=</span> <span class="n">fg</span><span class="p">(</span><span class="s">&#39;red1&#39;</span><span class="p">,</span> <span class="n">fg</span><span class="p">(</span><span class="s">&#39;bold&#39;</span><span class="p">,</span> <span class="n">bg</span><span class="p">(</span><span class="s">&#39;blue2&#39;</span><span class="p">,</span> <span class="s">&#39;Lots of attributes&#39;</span><span class="p">)));</span>
+<span class="k">print</span> <span class="n">uncolored</span><span class="p">(</span><span class="nv">$colored</span><span class="p">);</span> <span class="c1"># Normal text</span>
+</code></pre>
+</div><p><b>set_color()</b> allows you to <i>change</i> mapped colors, <span class="caps">ANSI</span> as well as the extended ones.<br />
 This is the same technique that&#8217;s used in <a href="https://github.com/trapd00r/colorcoke">colorcoke</a>.</p>
-</notextile>
+<div class="highlight"><pre><code class="perl"><span class="c1"># Change the first ANSI color (usually black) to red</span>
+<span class="k">print</span> <span class="n">set_color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;ff0000&#39;</span><span class="p">);</span>
+<span class="c1"># Change extended color 196 (#ff0000) to yellow</span>
+<span class="k">print</span> <span class="n">set_color</span><span class="p">(</span><span class="mi">196</span><span class="p">,</span> <span class="s">&#39;ffff00&#39;</span><span class="p">);</span>
+</code></pre>
+</div><p><b>get_colors()</b> returns a hash reference with all available colors:</p>
+<div class="highlight"><pre><code class="perl"><span class="k">my</span> <span class="nv">$colors</span> <span class="o">=</span> <span class="n">get_colors</span><span class="p">();</span>
 
-<b>get_colors()</b> returns a hash reference with all available colors:
+<span class="k">for</span> <span class="k">my</span> <span class="nv">$c</span><span class="p">(</span><span class="nb">sort</span><span class="p">(</span><span class="nb">keys</span><span class="p">(</span><span class="nv">%</span><span class="p">{</span><span class="nv">$colors</span><span class="p">})))</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="s">&quot;$c\n&quot;</span><span class="p">;</span>
 
-<notextile><p><b>lookup()</b> allows you to lookup a color by their index.</p>
-<p></notextile></p>
+  <span class="c1"># Or, print them in their respective color</span>
+  <span class="k">print</span> <span class="n">fg</span><span class="p">(</span><span class="nv">$c</span><span class="p">,</span> <span class="nv">$c</span><span class="p">),</span> <span class="s">&quot;\n&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div><p><b>lookup()</b> allows you to lookup a color by their index.</p>
+<div class="highlight"><pre><code class="perl"><span class="k">for</span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">255</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">my</span> <span class="nv">$color_str</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">(</span><span class="nv">$_</span><span class="p">);</span>
+  <span class="k">if</span><span class="p">(</span><span class="nb">defined</span><span class="p">(</span><span class="nv">$color_str</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nb">printf</span><span class="p">(</span><span class="s">&quot;%25s =&gt; %s\n&quot;</span><span class="p">,</span> <span class="n">fg</span><span class="p">(</span><span class="nv">$color_str</span><span class="p">,</span> <span class="nv">$color_str</span><span class="p">),</span> <span class="nv">$_</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
 </div>
 
 
@@ -96,16 +153,22 @@ This is the same technique that&#8217;s used in <a href="https://github.com/trap
 
   <div id="footer">
     <a href="http://github.com/trapd00r">github</a> ||
-    <a href="http://github.com/trapd00r/pimpd">pimpd</a> ||
+    <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> ||
     <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
     <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
     <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
     <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
-    <a href="http://github.com/trapd00r/utils">utils</a>
+    <a href="http://github.com/trapd00r/ls--">ls++</a> ||
+    <a href="http://github.com/trapd00r/xkcd">xkcd</a> <br>
+
+    <a href="http://search.cpan.org/~woldrich/">CPAN releases</a> ||
+    <a href="http://cpan.japh.se">CPAN mirror</a> ||
+    <!-- <a href="http://cpan.japh.se" class="blue">CPAN mirror</a> || -->
+    <a href="http://github.com/trapd00r.se/">Follow this site</a>
 
     <p>
     <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
-    <p>&copy; 2010 <a href="/about.html">Magnus Woldrich</a></p>
+    <p>&copy; 2011 <a href="/about.html">Magnus Woldrich</a></p>
 
   </div>
 </div>
