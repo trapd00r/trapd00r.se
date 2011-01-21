@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="grey">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> ?
+      <a href="/os"   class="green">os(linux,unix)</a> :
+      <a href="/code" class="orange">hacks(code)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2>Readline</h2>
+<p class="publish_date">21 January 2011</p>
+<p>
+<p>I&#8217;ve experimented a bit with various readline implementations in Perl.<br />
+There&#8217;s <a href="http://search.cpan.org/search?query=readline&mode=all">quite a few</a> on the <span class="caps">CPAN</span>, like you&#8217;d expect.</p>
+<p>I&#8217;ve used <strong>Term::ReadLine::Gnu</strong> for some projects; most notably the shell functionality in <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> and I thought it was pretty good. The only thing missing was a sane keymap (that is, a <strong>vi-mode</strong>).</p>
+</p>
+<p>
+<p>So I went looking for modules that might support this.<br />
+The first hit was <strong>Term::ReadLine::Zoid</strong> with its subclass <strong>ViCommand</strong>. This was spot on.</p>
+</p>
+<p>
+<p>A nice thing with the readline implementations is that they&#8217;re all compatible; you don&#8217;t have to change the codebase if you switch module.<br />
+So I had a snippet like this:</p>
+<div class="highlight"><pre><code class="perl"><span class="k">use</span> <span class="n">strict</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">Term::</span><span class="n">ReadLine</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">B::</span><span class="n">Keywords</span> <span class="sx">qw(@Symbols)</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">Eval::</span><span class="n">WithLexicals</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">Data::</span><span class="n">Dumper</span><span class="p">;</span>
+
+<span class="p">{</span>
+  <span class="nb">package</span> <span class="nn">Data::</span><span class="n">Dumper</span><span class="p">;</span>
+  <span class="nb">no</span> <span class="n">strict</span> <span class="s">&#39;vars&#39;</span><span class="p">;</span>
+  <span class="nv">$Terse</span> <span class="o">=</span> <span class="nv">$Indent</span> <span class="o">=</span> <span class="nv">$Useqq</span> <span class="o">=</span> <span class="nv">$Deparse</span> <span class="o">=</span> <span class="nv">$Sortkeys</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="nv">$Quotekeys</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">my</span> <span class="nv">$term</span> <span class="o">=</span> <span class="nn">Term::</span><span class="n">ReadLine</span><span class="o">-&gt;</span><span class="k">new</span><span class="p">(</span><span class="s">&#39;re.pl&#39;</span><span class="p">);</span>
+<span class="k">my</span> <span class="nv">$attr</span> <span class="o">=</span> <span class="nv">$term</span><span class="o">-&gt;</span><span class="n">Attribs</span><span class="p">;</span>
+
+<span class="nv">$attr</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">completion_function</span><span class="p">}</span> <span class="o">=</span> <span class="k">sub </span><span class="p">{</span>
+  <span class="k">my</span><span class="p">(</span><span class="nv">$word</span><span class="p">,</span> <span class="nv">$buffer</span><span class="p">,</span> <span class="nv">$start</span><span class="p">)</span> <span class="o">=</span> <span class="nv">@_</span><span class="p">;</span>
+  <span class="k">return</span> <span class="p">(</span><span class="nv">@Symbols</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nv">$attr</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">autolist</span><span class="p">}</span>    <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>
+<span class="nv">$attr</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">maxcomplete</span><span class="p">}</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>
+
+<span class="k">my</span> <span class="nv">$eval</span> <span class="o">=</span> <span class="nn">Eval::</span><span class="n">WithLexicals</span><span class="o">-&gt;</span><span class="k">new</span><span class="p">;</span>
+
+<span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">my</span> <span class="nv">$line</span> <span class="o">=</span> <span class="nv">$term</span><span class="o">-&gt;</span><span class="nb">readline</span><span class="p">(</span><span class="s">&#39;&gt; &#39;</span><span class="p">);</span>
+  <span class="k">my</span> <span class="nv">@ret</span><span class="p">;</span>
+
+  <span class="nb">eval</span> <span class="p">{</span>
+    <span class="nb">local</span> <span class="nv">$SIG</span><span class="p">{</span><span class="n">INT</span><span class="p">}</span> <span class="o">=</span> <span class="k">sub </span><span class="p">{</span> <span class="nb">die</span> <span class="s">&quot;Caught SIGINT&quot;</span><span class="p">;</span> <span class="p">};</span>
+    <span class="nv">@ret</span> <span class="o">=</span> <span class="nv">$eval</span><span class="o">-&gt;</span><span class="nb">eval</span><span class="p">(</span><span class="nv">$line</span><span class="p">);</span>
+    <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span> <span class="ow">or</span> <span class="nv">@ret</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;Error!&quot;</span><span class="p">,</span> <span class="vg">$@</span><span class="p">);</span>
+  <span class="k">print</span> <span class="n">Dumper</span> <span class="nv">@ret</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div><p>This simple <strong><span class="caps">REPL</span></strong> tabcompletes to the imported symbols from the <strong>B::Keywords</strong> package, and it works like you&#8217;d expect with <strong>Term::ReadLine::Gnu</strong>.<br />
+To try this out with <strong>Term::ReadLine::Zoid</strong> we execute it like so;</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">PERL__RL</span><span class="o">=</span>Zoid perl re.pl
+</code></pre>
+</div><p>The vi-mode worked out of the box and I played with it for a bit.<br />
+Then I noticed that using f, F, t, or T in normal mode didn&#8217;t work quite so well;</p>
+<div class="highlight"><pre><code class="perl"><span class="o">&gt;</span> <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1"># pressing &lt;ESC&gt;, F, ( results in...</span>
+
+<span class="n">Unmatched</span> <span class="p">(</span> <span class="n">in</span> <span class="n">regex</span><span class="p">;</span> <span class="n">marked</span> <span class="n">by</span> <span class="o">&lt;--</span> <span class="n">HERE</span> <span class="n">in</span> <span class="sr">m/.*((?:( &lt;-- HERE /</span> <span class="n">at</span> <span class="n">ViCommand</span><span class="o">.</span><span class="n">pm</span> <span class="n">line</span> <span class="mi">544</span>
+</code></pre>
+</div><p>Alright. Obvious what happens here; the &#8216;(&#8217; is being treated as a pattern metacharacter by the regex compiler.<br />
+Should be an easy fix.</p>
+<div class="highlight"><pre><code class="perl"><span class="o">---</span> <span class="n">ViCommand</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">orig</span> <span class="mi">2004</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">22</span> <span class="mi">14</span><span class="p">:</span><span class="mi">09</span><span class="p">:</span><span class="mf">23.000000000</span> <span class="o">+</span><span class="mo">0100</span>
+<span class="o">+++</span> <span class="n">ViCommand</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">fix</span>  <span class="mi">2011</span><span class="o">-</span><span class="mo">01</span><span class="o">-</span><span class="mi">20</span> <span class="mi">17</span><span class="p">:</span><span class="mi">57</span><span class="p">:</span><span class="mf">11.283335132</span> <span class="o">+</span><span class="mo">0100</span>
+<span class="nv">@@</span> <span class="err">-</span><span class="nv">537</span><span class="p">,</span><span class="mi">12</span> <span class="o">+</span><span class="mi">537</span><span class="p">,</span><span class="mi">14</span> <span class="nv">@@</span>
+  <span class="nv">my</span> <span class="p">(</span><span class="nv">$l</span><span class="p">,</span> <span class="nv">$x</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span> <span class="nv">$$self</span><span class="p">{</span><span class="n">lines</span><span class="p">}[</span> <span class="nv">$$self</span><span class="p">{</span><span class="nb">pos</span><span class="p">}[</span><span class="mi">1</span><span class="p">]</span> <span class="p">],</span> <span class="nv">$$self</span><span class="p">{</span><span class="nb">pos</span><span class="p">}[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nv">$key</span> <span class="ow">eq</span> <span class="s">&#39;T&#39;</span> <span class="ow">or</span> <span class="nv">$key</span> <span class="ow">eq</span> <span class="s">&#39;F&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$l</span> <span class="o">=</span> <span class="nb">substr</span><span class="p">(</span><span class="nv">$l</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">$x</span><span class="p">);</span>
+<span class="o">-</span>   <span class="k">return</span> <span class="nv">$self</span><span class="o">-&gt;</span><span class="n">bell</span> <span class="k">unless</span> <span class="nv">$l</span> <span class="o">=~</span><span class="sr"> /.*((?:$chr.*){$cnt})$/</span><span class="p">;</span>
+<span class="o">+</span>   <span class="c1"># We do not want $chr to be interpreted as pattern metacharacters</span>
+<span class="o">+</span>   <span class="c1"># Avoid &#39;unmatched &quot;(&quot; in regex&#39;</span>
+<span class="o">+</span>   <span class="k">return</span> <span class="nv">$self</span><span class="o">-&gt;</span><span class="n">bell</span> <span class="k">unless</span> <span class="nv">$l</span> <span class="o">=~</span><span class="sr"> /.*((?:\Q$chr\E.*){$cnt})$/</span><span class="p">;</span>
+    <span class="nv">$$self</span><span class="p">{</span><span class="nb">pos</span><span class="p">}[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-=</span> <span class="nb">length</span><span class="p">(</span><span class="nv">$1</span><span class="p">)</span> <span class="o">-</span> <span class="p">((</span><span class="nv">$key</span> <span class="ow">eq</span> <span class="s">&#39;T&#39;</span><span class="p">)</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nb">length</span><span class="p">(</span><span class="nv">$1</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span> <span class="c1"># ($key eq &#39;t&#39; || $key eq &#39;f&#39;)</span>
+<span class="o">-</span>   <span class="k">return</span> <span class="nv">$self</span><span class="o">-&gt;</span><span class="n">bell</span> <span class="k">unless</span> <span class="nv">$l</span> <span class="o">=~</span><span class="sr"> /^..{$x}((?:.*?$chr){$cnt})/</span><span class="p">;</span>
+<span class="o">+</span>   <span class="k">return</span> <span class="nv">$self</span><span class="o">-&gt;</span><span class="n">bell</span> <span class="k">unless</span> <span class="nv">$l</span> <span class="o">=~</span><span class="sr"> /^..{$x}((?:.*?\Q$chr\E){$cnt})/</span><span class="p">;</span>
+    <span class="nv">$$self</span><span class="p">{</span><span class="nb">pos</span><span class="p">}[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">length</span><span class="p">(</span><span class="nv">$1</span><span class="p">)</span> <span class="o">-</span> <span class="p">((</span><span class="nv">$key</span> <span class="ow">eq</span> <span class="s">&#39;t&#39;</span><span class="p">)</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nb">length</span><span class="p">(</span><span class="nv">$1</span><span class="p">);</span>
+  <span class="p">}</span>
+</code></pre>
+</div><p>I&#8217;ve sent the patch upstream; the module hasn&#8217;t been updated since 2004 though, so just in case a fork can be found <a href="https://github.com/trapd00r/Term-ReadLine-Zoid">here</a>, and the diff <a href="https://github.com/trapd00r/Term-ReadLine-Zoid/commit/b014f24da4722fe95d4217e9ef621833fc3ccda4">here</a>.<br />
+After applying that fix, the vi-mode worked just fine. So time to find another obstacle&#8230;</p>
+</p>
+<p>
+<p><strong>Term::ReadLine::Zoid</strong> does not come with a completion function by default.<br />
+The completion function I defined in the above code snippet simply returned all strings in the @Symbols array every time <span class="caps">TAB</span> was pressed. Not what I want.<br />
+So this means I&#8217;ll have to create a new completion function from scratch and inject it into Zoid. Or does it?</p>
+<p>No.</p>
+<p>I started reading the documentation one more time. I had missed a very important thing in the Zoid documentation:</p>
+<blockquote>
+<p>It features almost all key-bindings described in the posix spec for the sh(1) utility with some extensions like multiline editing;<br />
+this includes a vi-command mode with a save-buffer (for copy-pasting) and an undo-stack.</p>
+</blockquote>
+<p>I couldn&#8217;t see why the Gnu implementation wouldn&#8217;t support this. So I turned to the mighty interweb and found <a href="http://cpan.uwinnipeg.ca/htdocs/Term-ReadLine-Gnu/Term/ReadLine/Gnu.pm.html#RL_STATE_VIMOTION-">a reference to RL_STATE_VIMOTION</a>. This should mean <strong>there is</strong> support for vi-mode, even though not explicitly stated in the documentation&#8230; The &#8216;Selecting a Keymap&#8217; section caught my eye.</p>
+<div class="highlight"><pre><code class="c"><span class="s">&quot;make_bare_keymap&quot;</span>
+            <span class="n">Keymap</span>  <span class="n">rl_make_bare_keymap</span><span class="p">()</span>
+
+<span class="s">&quot;copy_keymap(MAP)&quot;</span>
+            <span class="n">Keymap</span>  <span class="n">rl_copy_keymap</span><span class="p">(</span><span class="n">Keymap</span><span class="o">|</span><span class="n">str</span> <span class="n">map</span><span class="p">)</span>
+
+<span class="s">&quot;make_keymap&quot;</span>
+            <span class="n">Keymap</span>  <span class="n">rl_make_keymap</span><span class="p">()</span>
+
+<span class="s">&quot;discard_keymap(MAP)&quot;</span>
+            <span class="n">Keymap</span>  <span class="n">rl_discard_keymap</span><span class="p">(</span><span class="n">Keymap</span><span class="o">|</span><span class="n">str</span> <span class="n">map</span><span class="p">)</span>
+
+<span class="s">&quot;free_keymap(MAP)&quot;</span>
+            <span class="kt">void</span>    <span class="n">rl_free_keymap</span><span class="p">(</span><span class="n">Keymap</span><span class="o">|</span><span class="n">str</span> <span class="n">map</span><span class="p">)</span>
+
+<span class="s">&quot;get_keymap&quot;</span>
+            <span class="n">Keymap</span>  <span class="n">rl_get_keymap</span><span class="p">()</span>
+
+<span class="s">&quot;set_keymap(MAP)&quot;</span>
+            <span class="n">Keymap</span>  <span class="n">rl_set_keymap</span><span class="p">(</span><span class="n">Keymap</span><span class="o">|</span><span class="n">str</span> <span class="n">map</span><span class="p">)</span>
+
+<span class="s">&quot;get_keymap_by_name(NAME)&quot;</span>
+            <span class="n">Keymap</span>  <span class="n">rl_get_keymap_by_name</span><span class="p">(</span><span class="n">str</span> <span class="n">name</span><span class="p">)</span>
+
+<span class="s">&quot;get_keymap_name(MAP)&quot;</span>
+            <span class="n">str</span>     <span class="n">rl_get_keymap_name</span><span class="p">(</span><span class="n">Keymap</span> <span class="n">map</span><span class="p">)</span>
+</code></pre>
+</div><p>Not that much of a description, but let&#8217;s play around a bit&#8230;</p>
+<div class="highlight"><pre><code class="perl"><span class="c1"># bless( do{\(my $o = &quot;-1221627264&quot;)}, &#39;Keymap&#39; )</span>
+<span class="k">print</span> <span class="n">Dumper</span> <span class="nv">$term</span><span class="o">-&gt;</span><span class="n">get_keymap</span><span class="p">();</span>
+
+<span class="c1"># bless( do{\(my $o = &quot;-1220973856&quot;)}, &#39;Keymap&#39; )</span>
+<span class="k">print</span> <span class="n">Dumper</span> <span class="nv">$term</span><span class="o">-&gt;</span><span class="n">get_keymap_by_name</span><span class="p">(</span><span class="s">&#39;vi&#39;</span><span class="p">);</span>
+
+<span class="c1"># Whoah.</span>
+<span class="nv">$term</span><span class="o">-&gt;</span><span class="n">set_keymap</span><span class="p">(</span><span class="s">&#39;vi&#39;</span><span class="p">);</span>
+</code></pre>
+</div><p>And there we have it; a nice, working tabcompletion and a sane keymap. Time to write a sane <span class="caps">REPL</span>, using the module I first started out with 2 hours ago&#8230;</p>
+</p>
+</div>
+
+
+<div id="related">
+  <h3>Somewhat Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/perl/2010/06/30/The-quest-for-The-Element/">The quest for The Element</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2010/12/05/Term%3A%3AExtendedColor/">Term::ExtendedColor</a></li>
+    
+      <li>&raquo; <a href="/all/os/2010/10/03/24bit-colordepth-in-a-terminal-near-you/">24bit colordepth in a terminal near you</a></li>
+    
+  </ul>
+</div>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
+    <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
+    <a href="http://github.com/trapd00r/ls--">ls++</a> ||
+    <a href="http://github.com/trapd00r/xkcd">xkcd</a> <br>
+
+    <a href="http://search.cpan.org/~woldrich/">CPAN releases</a> ||
+    <a href="http://cpan.japh.se">CPAN mirror</a> ||
+    <!-- <a href="http://cpan.japh.se" class="blue">CPAN mirror</a> || -->
+    <a href="http://github.com/trapd00r.se/">Follow this site</a>
+
+    <p>
+    <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
+    <p>&copy; 2011 <a href="/about.html">Magnus Woldrich</a></p>
+
+  </div>
+</div>
+</body>

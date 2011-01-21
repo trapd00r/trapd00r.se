@@ -1,0 +1,181 @@
+---
+layout: post
+title: "Readline"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 21 January 2011
+
+<p>
+I've experimented a bit with various readline implementations in Perl.
+There's <a href="http://search.cpan.org/search?query=readline&mode=all">quite a few</a> on the CPAN, like you'd expect.
+
+I've used <strong>Term::ReadLine::Gnu</strong> for some projects; most notably the shell functionality in <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> and I thought it was pretty good. The only thing missing was a sane keymap (that is, a <strong>vi-mode</strong>).
+</p>
+
+<p>
+So I went looking for modules that might support this.
+The first hit was <strong>Term::ReadLine::Zoid</strong> with its subclass <strong>ViCommand</strong>. This was spot on.
+</p>
+<p>
+A nice thing with the readline implementations is that they're all compatible; you don't have to change the codebase if you switch module.
+So I had a snippet like this:
+
+{%highlight perl%}
+
+use strict;
+use Term::ReadLine;
+use B::Keywords qw(@Symbols);
+use Eval::WithLexicals;
+use Data::Dumper;
+
+{
+  package Data::Dumper;
+  no strict 'vars';
+  $Terse = $Indent = $Useqq = $Deparse = $Sortkeys = 1;
+  $Quotekeys = 0;
+}
+
+my $term = Term::ReadLine->new('re.pl');
+my $attr = $term->Attribs;
+
+$attr->{completion_function} = sub {
+  my($word, $buffer, $start) = @_;
+  return (@Symbols);
+};
+
+$attr->{autolist}    =  0;
+$attr->{maxcomplete} =  0;
+
+my $eval = Eval::WithLexicals->new;
+
+while(1) {
+  my $line = $term->readline('> ');
+  my @ret;
+
+  eval {
+    local $SIG{INT} = sub { die "Caught SIGINT"; };
+    @ret = $eval->eval($line);
+    1;
+  } or @ret = ("Error!", $@);
+  print Dumper @ret;
+}
+
+{%endhighlight%}
+
+This simple <strong>REPL</strong> tabcompletes to the imported symbols from the <strong>B::Keywords</strong> package, and it works like you'd expect with <strong>Term::ReadLine::Gnu</strong>.
+To try this out with <strong>Term::ReadLine::Zoid</strong> we execute it like so;
+
+{%highlight bash%}
+
+PERL__RL=Zoid perl re.pl
+
+{%endhighlight%}
+
+The vi-mode worked out of the box and I played with it for a bit.
+Then I noticed that using f, F, t, or T in normal mode didn't work quite so well;
+
+{%highlight perl%}
+> while(1) { # pressing <ESC>, F, ( results in...
+
+Unmatched ( in regex; marked by <-- HERE in m/.*((?:( <-- HERE / at ViCommand.pm line 544
+
+{%endhighlight%}
+
+Alright. Obvious what happens here; the '(' is being treated as a pattern metacharacter by the regex compiler.
+Should be an easy fix.
+
+{%highlight perl%}
+
+--- ViCommand.pm.orig 2004-11-22 14:09:23.000000000 +0100
++++ ViCommand.pm.fix  2011-01-20 17:57:11.283335132 +0100
+@@ -537,12 +537,14 @@
+  my ($l, $x) = ( $$self{lines}[ $$self{pos}[1] ], $$self{pos}[0] );
+  if ($key eq 'T' or $key eq 'F') {
+    $l = substr($l, 0, $x);
+-   return $self->bell unless $l =~ /.*((?:$chr.*){$cnt})$/;
++   # We do not want $chr to be interpreted as pattern metacharacters
++   # Avoid 'unmatched "(" in regex'
++   return $self->bell unless $l =~ /.*((?:\Q$chr\E.*){$cnt})$/;
+    $$self{pos}[0] -= length($1) - (($key eq 'T') ? 1 : 0);
+    return length($1);
+  }
+  else { # ($key eq 't' || $key eq 'f')
+-   return $self->bell unless $l =~ /^..{$x}((?:.*?$chr){$cnt})/;
++   return $self->bell unless $l =~ /^..{$x}((?:.*?\Q$chr\E){$cnt})/;
+    $$self{pos}[0] += length($1) - (($key eq 't') ? 1 : 0);
+    return length($1);
+  }
+
+{%endhighlight%}
+
+I've sent the patch upstream; the module hasn't been updated since 2004 though, so just in case a fork can be found <a href="https://github.com/trapd00r/Term-ReadLine-Zoid">here</a>, and the diff <a href="https://github.com/trapd00r/Term-ReadLine-Zoid/commit/b014f24da4722fe95d4217e9ef621833fc3ccda4">here</a>.
+After applying that fix, the vi-mode worked just fine. So time to find another obstacle...
+</p>
+
+<p>
+
+<strong>Term::ReadLine::Zoid</strong> does not come with a completion function by default.
+The completion function I defined in the above code snippet simply returned all strings in the @Symbols array every time TAB was pressed. Not what I want.
+So this means I'll have to create a new completion function from scratch and inject it into Zoid. Or does it?
+
+No.
+
+I started reading the documentation one more time. I had missed a very important thing in the Zoid documentation:
+
+<blockquote>
+It features almost all key-bindings described in the posix spec for the sh(1) utility with some extensions like multiline editing;
+this includes a vi-command mode with a save-buffer (for copy-pasting) and an undo-stack.
+</blockquote>
+
+I couldn't see why the Gnu implementation wouldn't support this. So I turned to the mighty interweb and found <a href="http://cpan.uwinnipeg.ca/htdocs/Term-ReadLine-Gnu/Term/ReadLine/Gnu.pm.html#RL_STATE_VIMOTION-">a reference to RL_STATE_VIMOTION</a>. This should mean <strong>there is</strong> support for vi-mode, even though not explicitly stated in the documentation... The 'Selecting a Keymap' section caught my eye.
+
+{%highlight c%}
+
+"make_bare_keymap"
+            Keymap  rl_make_bare_keymap()
+
+"copy_keymap(MAP)"
+            Keymap  rl_copy_keymap(Keymap|str map)
+
+"make_keymap"
+            Keymap  rl_make_keymap()
+
+"discard_keymap(MAP)"
+            Keymap  rl_discard_keymap(Keymap|str map)
+
+"free_keymap(MAP)"
+            void    rl_free_keymap(Keymap|str map)
+
+"get_keymap"
+            Keymap  rl_get_keymap()
+
+"set_keymap(MAP)"
+            Keymap  rl_set_keymap(Keymap|str map)
+
+"get_keymap_by_name(NAME)"
+            Keymap  rl_get_keymap_by_name(str name)
+
+"get_keymap_name(MAP)"
+            str     rl_get_keymap_name(Keymap map)
+
+{%endhighlight%}
+
+Not that much of a description, but let's play around a bit...
+
+{%highlight perl%}
+
+# bless( do{\(my $o = "-1221627264")}, 'Keymap' )
+print Dumper $term->get_keymap();
+
+# bless( do{\(my $o = "-1220973856")}, 'Keymap' )
+print Dumper $term->get_keymap_by_name('vi');
+
+# Whoah.
+$term->set_keymap('vi');
+
+{%endhighlight%}
+
+And there we have it; a nice, working tabcompletion and a sane keymap. Time to write a sane REPL, using the module I first started out with 2 hours ago...
+</p>
