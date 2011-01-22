@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="grey">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> ?
+      <a href="/os"   class="green">os(linux,unix)</a> :
+      <a href="/code" class="orange">hacks(code)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2>xkcd in your console</h2>
+<p class="publish_date">22 January 2011</p>
+<p><a href="http://search.cpan.org/~woldrich/App-xkcd/"><b><span class="caps">CPAN</span></b></a> (stable release) || <a href="https://github.com/trapd00r/xkcd"><b> <span class="caps">GIT</span></b></a> (dev release)<br />
+<p></p>
+<p>I love xkcd; everybody does.<br />
+What I don&#8217;t like is how you have to move the mouse cursor over the picture to see the hover text, which often is necessary for fully understanding the comic.<br />
+Since I don&#8217;t use a mouse, for several reasons, I had to curl and grep; not very userfriendly, eh.</p>
+</p>
+<h3>App::xkcd</h3>
+<p>
+<p><strong>xkcd</strong> is a command-line interface to <a href="http://xkcd.com">xkcd.com</a>.</p>
+</p>
+<p>
+<p>View, download and enjoy comics straight from the comfortable shell. The mouse-over text is displayed when the image-viewing application exits for maximum amusement.<br />
+Called with zero arguments, the latest xkcd comic is displayed. The <strong>-c</strong> flag takes an (preferably valid) integer that corresponds to that particular xkcd comic number. The <strong>-a</strong> flag only displays the mouse-over text, while the <strong>-d</strong> flag downloads the comic to <strong>location</strong>.</p>
+</p>
+<p>A typical run might look like this:</p>
+<div class="highlight"><pre><code class="bash">&gt; xkcd
+Latest XKCD:
+ It is not our fault we caught a group on their way home from a geography bee.
+ And they taught us that Uzbekistan is one of the worlds two doubly-landlocked
+ countries!
+
+&gt; xkcd -c 183 -a
+ I am not making this rule up.
+ Although my mom wants you all to know it made perfect sense at the time.
+
+&gt; xkcd -d .
+http://imgs.xkcd.com/comics/world_according_to_americans.png
+  <span class="o">=</span>&gt; ./world_according_to_americans.png
+
+&gt; xkcd -c 193 -d .
+http://imgs.xkcd.com/comics/the_perfect_sound.png
+  <span class="o">=</span>&gt; ./193-the_perfect_sound.png
+</code></pre>
+</div><h3><span class="caps">INSTALLATION</span></h3>
+<p>For the &#8216;stable&#8217; version:</p>
+<div class="highlight"><pre><code class="bash">cpan App::xkcd
+</code></pre>
+</div><p>or, for the development version:</p>
+<div class="highlight"><pre><code class="bash">cpan WWW::Mechanize
+git clone git://github.com/trapd00r/xkcd.git
+<span class="nb">cd </span>xkcd
+perl Makefile.PL <span class="o">&amp;&amp;</span> make <span class="o">&amp;&amp;</span> su -c <span class="s1">&#39;make install&#39;</span>
+</code></pre>
+</div><h3><span class="caps">PREREQUISITES</span></h3>
+<p>The Perl module <a
+href="http://search.cpan.org/~petdance/WWW-Mechanize-1.66/lib/WWW/Mechanize.pm"><strong><span class="caps">WWW</span>::Mechanize</strong></a> needs to be installed.</p>
+<p>To view the xkcd comics in X, <strong>feh</strong> or <strong>display</strong> (from the ImageMagick suite) is also required.</p>
+<h3><span class="caps">OPTIONS</span></h3>
+<div class="highlight"><pre><code class="bash">    -c,   --comic     comic number
+    -l,   --latest    show the latest xkcd comic
+    -a,   --alt       show the <span class="s1">&#39;mouse over&#39;</span> text
+    -d,   --download  download the comic to DESTINATION
+
+    -h,   --help      show the <span class="nb">help </span>and <span class="nb">exit</span>
+    -v,   --version   show version info and <span class="nb">exit</span>
+    -m,   --man       show the documentation and <span class="nb">exit</span>
+</code></pre>
+</div>
+</div>
+
+
+<div id="related">
+  <h3>Somewhat Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/code/2010/07/12/remote-controlled-mplayer-daemon/">Remote Mplayer Client/Daemon</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2010/06/30/The-quest-for-The-Element/">The quest for The Element</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2010/12/05/Term%3A%3AExtendedColor/">Term::ExtendedColor</a></li>
+    
+  </ul>
+</div>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
+    <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
+    <a href="http://github.com/trapd00r/ls--">ls++</a> ||
+    <a href="http://github.com/trapd00r/xkcd">xkcd</a> <br>
+
+    <a href="http://search.cpan.org/~woldrich/">CPAN releases</a> ||
+    <a href="http://cpan.japh.se">CPAN mirror</a> ||
+    <!-- <a href="http://cpan.japh.se" class="blue">CPAN mirror</a> || -->
+    <a href="http://github.com/trapd00r.se/">Follow this site</a>
+
+    <p>
+    <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
+    <p>&copy; 2011 <a href="/about.html">Magnus Woldrich</a></p>
+
+  </div>
+</div>
+</body>

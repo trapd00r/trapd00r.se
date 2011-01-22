@@ -1,0 +1,95 @@
+---
+layout: post
+title: "xkcd in your console"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 22 January 2011
+
+<a href="http://search.cpan.org/~woldrich/App-xkcd/"><b>CPAN</b></a> (stable release) || <a href="https://github.com/trapd00r/xkcd"><b> GIT</b></a> (dev release)
+<p>
+
+I love xkcd; everybody does.
+What I don't like is how you have to move the mouse cursor over the picture to see the hover text, which often is necessary for fully understanding the comic.
+Since I don't use a mouse, for several reasons, I had to curl and grep; not very userfriendly, eh.
+</p>
+
+h3. App::xkcd
+
+<p>
+<strong>xkcd</strong> is a command-line interface to <a href="http://xkcd.com">xkcd.com</a>.
+</p>
+
+<p>
+View, download and enjoy comics straight from the comfortable shell. The mouse-over text is displayed when the image-viewing application exits for maximum amusement.
+Called with zero arguments, the latest xkcd comic is displayed. The <strong>-c</strong> flag takes an (preferably valid) integer that corresponds to that particular xkcd comic number. The <strong>-a</strong> flag only displays the mouse-over text, while the <strong>-d</strong> flag downloads the comic to <strong>location</strong>.
+</p>
+
+A typical run might look like this:
+
+{%highlight bash%}
+
+> xkcd
+Latest XKCD:
+ It is not our fault we caught a group on their way home from a geography bee.
+ And they taught us that Uzbekistan is one of the worlds two doubly-landlocked
+ countries!
+
+> xkcd -c 183 -a
+ I am not making this rule up.
+ Although my mom wants you all to know it made perfect sense at the time.
+
+> xkcd -d .
+http://imgs.xkcd.com/comics/world_according_to_americans.png
+  => ./world_according_to_americans.png
+
+> xkcd -c 193 -d .
+http://imgs.xkcd.com/comics/the_perfect_sound.png
+  => ./193-the_perfect_sound.png
+
+{%endhighlight%}
+
+h3. INSTALLATION
+
+For the 'stable' version:
+
+{%highlight bash%}
+
+cpan App::xkcd
+
+{%endhighlight%}
+
+or, for the development version:
+
+{%highlight bash%}
+
+cpan WWW::Mechanize
+git clone git://github.com/trapd00r/xkcd.git
+cd xkcd
+perl Makefile.PL && make && su -c 'make install'
+
+{%endhighlight%}
+
+h3. PREREQUISITES
+
+The Perl module <a
+href="http://search.cpan.org/~petdance/WWW-Mechanize-1.66/lib/WWW/Mechanize.pm"><strong>WWW::Mechanize</strong></a> needs to be installed.
+
+To view the xkcd comics in X, <strong>feh</strong> or <strong>display</strong> (from the ImageMagick suite) is also required.
+
+h3. OPTIONS
+
+{%highlight bash%}
+
+    -c,   --comic     comic number
+    -l,   --latest    show the latest xkcd comic
+    -a,   --alt       show the 'mouse over' text
+    -d,   --download  download the comic to DESTINATION
+
+    -h,   --help      show the help and exit
+    -v,   --version   show version info and exit
+    -m,   --man       show the documentation and exit
+
+{%endhighlight%}
+
