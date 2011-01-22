@@ -1,0 +1,184 @@
+---
+layout: post
+title: "re.pl"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 22 January 2011
+
+<a href="https://github.com/trapd00r/re.pl"><b> GIT</b></a>
+<p>
+
+In the last post where I <a href="http://japh.se/all/perl/2011/01/21/Readline/">experimented with <strong>readline</strong></a> I mentioned hacking on a REPL.
+
+There are things like <a href="http://search.cpan.org/~doy/Devel-REPL-1.003012/lib/Devel/REPL.pm">Devel::REPL</a> that's supposed to be 'Modern Perl shells', and while I'm sure they're all great, it's not what I wanted.
+
+</p>
+
+h3. re.pl
+
+<p>
+There's a couple of things that I wanted from my REPL:
+</p>
+<pre>
+
+  · persistent lexical variables
+  · fatal warnings
+  · tab-completion for keywords, functions and modules (internal and external)
+  · integrated perldoc support (why leave the shell?)
+  · a vi keymap
+
+</pre>
+
+h4. Persistent lexical variables
+
+<p>
+Persistent lexical variables was something I didn't know I wanted before I understood what it was.
+The <strong>Eval::WithLexicals</strong> module by <strong>mst</strong> performs some really cool magic.
+To illustrate what this means, consider the following:
+
+{%highlight perl%}
+
+use strict;
+use feature 'say';
+
+say eval while <>;
+
+{%endhighlight%}
+
+Let's see what happens:
+
+{%highlight bash%}
+
+$_ = 4
+4
+++$_
+1
+my $foo = 42;
+42
+$foo += 10
+10
+
+{%endhighlight%}
+
+And with the use of Eval::WithLexicals:
+
+{%highlight bash%}
+
+> my $foo = 42
+42
+
+> ++$foo
+43
+
+{%endhighlight%}
+
+Without the use of persistent lexicals, a REPL is no better than simply using perl with the -f flag from the command line.
+This allows us to <strong>use</strong> modules and write full programs in the repl, one line at a time.
+
+</p>
+
+h4. Fatality
+
+<p>
+Another nice module (well, 'pragma') by <strong>mst</strong> is <a href="http://search.cpan.org/~mstrout/strictures-1.001001/lib/strictures.pm">strictures</a>.
+It enables <strong>strict</strong> and makes all warnings fatal - a warning will cause the program to die (there's some exceptions, which is explained in the documentation).
+
+</p>
+
+h4. Tab-completion
+
+<p>
+
+The tab-completion was simple, using Term::ReadLine::Gnu as descriped in the <a href="http://japh.se/all/perl/2011/01/21/Readline/">Readline</a> post.
+That post also covers how I finally managed to get a functional vi keymap.
+</p>
+
+<p>
+So how would I go about getting a list of all Perl keywords? All core functions?
+A search for 'keywords' on the CPAN revealed the B::Keywords module, which exports lists of reserved barewords and symbol names.
+Just what I wanted.
+</p>
+
+h4. Documentation
+
+<p>
+For the perldoc integration, we simply call out to system().
+For perldoc tab-completion, I wanted an updated list of modules available on the local machine.
+It'd be way to expensive recreating that database every single time the repl is run, so I use <strong>Storable</strong>, and added a <strong>--genmod</strong> flag for recreating it.
+
+<strong>Storable</strong> allows us to make arbitary Perl data structures persistent by saving them them to disk.
+
+{%highlight perl%}
+
+# Get available modules. If the hash of modules have been generated before,
+# we can simply retrieve it again, saving time and cpu cycles
+
+my @modules = get_installed_modules();
+
+sub get_installed_modules {
+  if(-f $module_db) {
+    %modules = %{ retrieve($module_db) },
+  }
+  else {
+    local $| = 1;
+    print "Generating list of available modules...";
+    map {
+      s%.+(?:core|site|vendor)_perl/(.+)\z%$1%;
+      s|/|::|g;
+      s/\.pm\z//;
+      ($_ =~ m/^5.10/) ? undef : $modules{$_}++;
+    } File::Find::Rule->file()->name('*.pm')->in(@INC);
+    printf("%s\n", (scalar(keys(%modules)) > 0) ? "[OK]" : "");
+  }
+
+  store(\%modules, $module_db);
+  return keys %modules;
+}
+
+{%endhighlight%}
+
+If the hash with modules have been generated one time,  and the --genmod flag is not specified, we skip the generation step and simply retrieves the structure that we saved earlier.
+
+</p>
+
+h4. Conclusion
+
+<p>
+It was fun hacking up this little REPL.
+I've familiarized myself with several really interesting modules that I'm now using frequently.
+
+Even though the Eval::WithLexicals module might not be that useful for other projects, it's still a really interesting piece of code, and I'd recommend you to <a href="http://cpansearch.perl.org/src/MSTROUT/Eval-WithLexicals-1.001000/lib/Eval/WithLexicals.pm">read the source</a>.
+
+The Storable module, on the other hand, is extremely useful for all kinds of tasks where a give data structure holds a not-so-dynamic dataset, and the time it takes to generate it over and over again, even though data data might still be the same, is frustrating.
+Storable is included in the Perl core since 5.7.3.
+
+</p>
+
+h3. INSTALLATION
+
+Install the required modules from the CPAN first:
+
+{%highlight bash%}
+
+cpan Eval::WithLexicals Term::ReadLine::Gnu B::Keywords strictures
+
+{%endhighlight%}
+
+Clone the <a href="http://github.com/trapd00r/re.pl">git repository</a>:
+
+{%highlight bash%}
+
+git clone git://github.com/trapd00r/re.pl.git
+
+{%endhighlight%}
+
+Build and install:
+
+{%highlight bash%}
+
+perl Makefile.PL
+make && su -c 'make install'
+
+{%endhighlight%}

@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>trapd00r.se - Hacking Life.</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="grey">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> ?
+      <a href="/os"   class="green">os(linux,unix)</a> :
+      <a href="/code" class="orange">hacks(code)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2>re.pl</h2>
+<p class="publish_date">22 January 2011</p>
+<p><a href="https://github.com/trapd00r/re.pl"><b> <span class="caps">GIT</span></b></a><br />
+<p></p>
+<p>In the last post where I <a href="http://japh.se/all/perl/2011/01/21/Readline/">experimented with <strong>readline</strong></a> I mentioned hacking on a <span class="caps">REPL</span>.</p>
+<p>There are things like <a href="http://search.cpan.org/~doy/Devel-REPL-1.003012/lib/Devel/REPL.pm">Devel::<span class="caps">REPL</span></a> that&#8217;s supposed to be &#8216;Modern Perl shells&#8217;, and while I&#8217;m sure they&#8217;re all great, it&#8217;s not what I wanted.</p>
+</p>
+<h3>re.pl</h3>
+<p>
+<p>There&#8217;s a couple of things that I wanted from my <span class="caps">REPL</span>:</p>
+</p>
+<pre>
+
+  · persistent lexical variables
+  · fatal warnings
+  · tab-completion for keywords, functions and modules (internal and external)
+  · integrated perldoc support (why leave the shell?)
+  · a vi keymap
+
+</pre>
+<h4>Persistent lexical variables</h4>
+<p>
+<p>Persistent lexical variables was something I didn&#8217;t know I wanted before I understood what it was.<br />
+The <strong>Eval::WithLexicals</strong> module by <strong>mst</strong> performs some really cool magic.<br />
+To illustrate what this means, consider the following:</p>
+<div class="highlight"><pre><code class="perl"><span class="k">use</span> <span class="n">strict</span><span class="p">;</span>
+<span class="k">use</span> <span class="n">feature</span> <span class="s">&#39;say&#39;</span><span class="p">;</span>
+
+<span class="n">say</span> <span class="nb">eval</span> <span class="k">while</span> <span class="o">&lt;&gt;</span><span class="p">;</span>
+</code></pre>
+</div><p>Let&#8217;s see what happens:</p>
+<div class="highlight"><pre><code class="bash"><span class="nv">$_</span> <span class="o">=</span> 4
+4
+++<span class="nv">$_</span>
+1
+my <span class="nv">$foo</span> <span class="o">=</span> 42;
+42
+<span class="nv">$foo</span> +<span class="o">=</span> 10
+10
+</code></pre>
+</div><p>And with the use of Eval::WithLexicals:</p>
+<div class="highlight"><pre><code class="bash">&gt; my <span class="nv">$foo</span> <span class="o">=</span> 42
+42
+
+&gt; ++<span class="nv">$foo</span>
+43
+</code></pre>
+</div><p>Without the use of persistent lexicals, a <span class="caps">REPL</span> is no better than simply using perl with the -f flag from the command line.<br />
+This allows us to <strong>use</strong> modules and write full programs in the repl, one line at a time.</p>
+</p>
+<h4>Fatality</h4>
+<p>
+<p>Another nice module (well, &#8216;pragma&#8217;) by <strong>mst</strong> is <a href="http://search.cpan.org/~mstrout/strictures-1.001001/lib/strictures.pm">strictures</a>.<br />
+It enables <strong>strict</strong> and makes all warnings fatal &#8211; a warning will cause the program to die (there&#8217;s some exceptions, which is explained in the documentation).</p>
+</p>
+<h4>Tab-completion</h4>
+<p>
+<p>The tab-completion was simple, using Term::ReadLine::Gnu as descriped in the <a href="http://japh.se/all/perl/2011/01/21/Readline/">Readline</a> post.<br />
+That post also covers how I finally managed to get a functional vi keymap.</p>
+</p>
+<p>
+<p>So how would I go about getting a list of all Perl keywords? All core functions?<br />
+A search for &#8216;keywords&#8217; on the <span class="caps">CPAN</span> revealed the B::Keywords module, which exports lists of reserved barewords and symbol names.<br />
+Just what I wanted.</p>
+</p>
+<h4>Documentation</h4>
+<p>
+<p>For the perldoc integration, we simply call out to system().<br />
+For perldoc tab-completion, I wanted an updated list of modules available on the local machine.<br />
+It&#8217;d be way to expensive recreating that database every single time the repl is run, so I use <strong>Storable</strong>, and added a <strong>&#8212;genmod</strong> flag for recreating it.</p>
+<p><strong>Storable</strong> allows us to make arbitary Perl data structures persistent by saving them them to disk.</p>
+<div class="highlight"><pre><code class="perl"><span class="c1"># Get available modules. If the hash of modules have been generated before,</span>
+<span class="c1"># we can simply retrieve it again, saving time and cpu cycles</span>
+
+<span class="k">my</span> <span class="nv">@modules</span> <span class="o">=</span> <span class="n">get_installed_modules</span><span class="p">();</span>
+
+<span class="k">sub </span><span class="nf">get_installed_modules</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="o">-</span><span class="n">f</span> <span class="nv">$module_db</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">%modules</span> <span class="o">=</span> <span class="nv">%</span><span class="p">{</span> <span class="n">retrieve</span><span class="p">(</span><span class="nv">$module_db</span><span class="p">)</span> <span class="p">},</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="nb">local</span> <span class="vg">$|</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">print</span> <span class="s">&quot;Generating list of available modules...&quot;</span><span class="p">;</span>
+    <span class="nb">map</span> <span class="p">{</span>
+      <span class="sr">s%.+(?:core|site|vendor)_perl/(.+)\z%$1%</span><span class="p">;</span>
+      <span class="n">s</span><span class="o">|/|::|</span><span class="n">g</span><span class="p">;</span>
+      <span class="sr">s/\.pm\z//</span><span class="p">;</span>
+      <span class="p">(</span><span class="nv">$_</span> <span class="o">=~</span> <span class="sr">m/^5.10/</span><span class="p">)</span> <span class="p">?</span> <span class="nb">undef</span> <span class="p">:</span> <span class="nv">$modules</span><span class="p">{</span><span class="nv">$_</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span> <span class="nn">File::Find::</span><span class="n">Rule</span><span class="o">-&gt;</span><span class="n">file</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">(</span><span class="s">&#39;*.pm&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">in</span><span class="p">(</span><span class="nv">@INC</span><span class="p">);</span>
+    <span class="nb">printf</span><span class="p">(</span><span class="s">&quot;%s\n&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nb">scalar</span><span class="p">(</span><span class="nb">keys</span><span class="p">(</span><span class="nv">%modules</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">?</span> <span class="s">&quot;[OK]&quot;</span> <span class="p">:</span> <span class="s">&quot;&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="n">store</span><span class="p">(</span><span class="o">\</span><span class="nv">%modules</span><span class="p">,</span> <span class="nv">$module_db</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nb">keys</span> <span class="nv">%modules</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div><p>If the hash with modules have been generated one time,  and the &#8212;genmod flag is not specified, we skip the generation step and simply retrieves the structure that we saved earlier.</p>
+</p>
+<h4>Conclusion</h4>
+<p>
+<p>It was fun hacking up this little <span class="caps">REPL</span>.<br />
+I&#8217;ve familiarized myself with several really interesting modules that I&#8217;m now using frequently.</p>
+<p>Even though the Eval::WithLexicals module might not be that useful for other projects, it&#8217;s still a really interesting piece of code, and I&#8217;d recommend you to read the source.</p>
+<p>The Storable module, on the other hand, is extremely useful for all kinds of tasks where a give data structure holds a not-so-dynamic dataset, and the time it takes to generate it over and over again, even though data data might still be the same, is frustrating.<br />
+Storable is included in the Perl core since 5.7.3.</p>
+</p>
+<h3><span class="caps">INSTALLATION</span></h3>
+<p>Install the required modules from the <span class="caps">CPAN</span> first:</p>
+<div class="highlight"><pre><code class="bash">cpan Eval::WithLexicals Term::ReadLine::Gnu B::Keywords strictures
+</code></pre>
+</div><p>Clone the <a href="http://github.com/trapd00r/re.pl">git repository</a>:</p>
+<div class="highlight"><pre><code class="bash">git clone git://github.com/trapd00r/re.pl.git
+</code></pre>
+</div><p>Build and install:</p>
+<div class="highlight"><pre><code class="bash">perl Makefile.PL
+make <span class="o">&amp;&amp;</span> su -c <span class="s1">&#39;make install&#39;</span>
+</code></pre>
+</div>
+</div>
+
+
+<div id="related">
+  <h3>Somewhat Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/perl/2011/01/21/Readline/">Readline</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2010/06/30/The-quest-for-The-Element/">The quest for The Element</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2010/12/05/Term%3A%3AExtendedColor/">Term::ExtendedColor</a></li>
+    
+  </ul>
+</div>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
+    <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
+    <a href="http://github.com/trapd00r/ls--">ls++</a> ||
+    <a href="http://github.com/trapd00r/xkcd">xkcd</a> <br>
+
+    <a href="http://search.cpan.org/~woldrich/">CPAN releases</a> ||
+    <a href="http://cpan.japh.se">CPAN mirror</a> ||
+    <!-- <a href="http://cpan.japh.se" class="blue">CPAN mirror</a> || -->
+    <a href="http://github.com/trapd00r.se/">Follow this site</a>
+
+    <p>
+    <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
+    <p>&copy; 2011 <a href="/about.html">Magnus Woldrich</a></p>
+
+  </div>
+</div>
+</body>
