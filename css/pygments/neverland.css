@@ -22,13 +22,13 @@
 .m { color: #0087ff } /* Literal.Number */
 .s { color: #d7af5f } /* Literal.String */
 .na { color: #a6e22e } /*--- Name.Attribute */
-.nb { color: #f8f8f2 } /*--- Name.Builtin */
+.nb { color: #ba2828 } /*--- Name.Builtin undef, map */
 .nc { color: #d75f00 } /* Name.Class */
 .no { color: #af5fff } /* Name.Constant */
 .nd { color: #a6e22e } /*--- Name.Decorator */
 .ni { color: #f8f8f2 } /*--- Name.Entity */
 .ne { color: #87ff00 } /* Name.Exception */
-.nf { color: #ff005f } /* Name.Function */
+.nf { color: #0087ff } /* Name.Function */
 .nl { color: #ffffaf } /* Name.Label */
 .nn { color: #f8f8f2 } /*--- Name.Namespace */
 .nx { color: #a6e22e } /*--- Name.Other */
