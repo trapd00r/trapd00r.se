@@ -1,11 +1,13 @@
-@font-face { font-family: Terminus; src: url('../fonts/terminus.ttf'); }
+@font-face { font-family: Terminus; src: url('../fonts/Terminus.ttf'); } /* fail */
 @font-face { font-family: DroidMono; src: url('../fonts/DroidSansMonoSlashed.ttf'); }
+@font-face { font-family: ProFont;   src: url('../fonts/ProFontWindows-webfont.ttf'); }
+@font-face { font-family: GB; src: url('../fonts/ProFontWindows-webfont.ttf'); }
 
 body {
   background: #121212;
   color:#e5e5e5;
-  /* font-family: 'lucida grande','lucida sans unicode',Verdana,Tahoma,Arial,sans-serif; */
-  font-family: DroidMono, Terminus
+  /*font-family: 'lucida grande','lucida sans unicode',Verdana,Tahoma,Arial,sans-serif;*/
+  /*font-family: DroidMono, Terminus;*/
   font-size:14px;
   line-height:1.2px;
   margin:0 auto;
@@ -50,6 +52,8 @@ ul ul,ol ol {
 
 .posts {
   padding:0;
+  font-family: ProFont, Terminus, Monospace;
+  font-size: 12px;
 }
 
 li {
@@ -60,7 +64,8 @@ li {
 
 ul.posts li span { /* post timestamps */
   float:right;
-  font-family:monofur, monaco, courier;
+  font-family: GB, Terminus, Monospace,
+  /*font-family:monofur, monaco, courier;*/
   color:#888;
 }
 
@@ -97,9 +102,9 @@ pre {
   line-height: 2em;
   clear:both;
   */
-  font-family: DroidMono, Terminus, Monaco, Courier, Monospace;
+  font-family: ProFont,DroidMono, Terminus, Monaco, Courier, Monospace;
   background: #121212;
-  font-size: 12px;
+  font-size: 10px;
   /*font-weight: bold; */
   line-height: 120%;
   padding-top: 0.2em;
@@ -127,10 +132,10 @@ pre {
 }
 
 .im {
-  font-size:14px;
+  font-size: 14px;
   line-height: 1.4em;
   width: 650px;
-  font-family: DroidMono, 'lucida grande','lucida sans','lucida sans unicode',helvetica,tahoma;
+  font-family: Terminus,DroidMono, 'lucida grande','lucida sans','lucida sans unicode',helvetica,tahoma;
   padding: 5px;
   background-color:#FFB604;
   color:#222;
@@ -238,7 +243,7 @@ h4 {
 
 #header {
   font-size: 16px;
-  font-family: Terminus;
+  font-family: Verdana;
   margin:0;
 
 }
@@ -256,8 +261,8 @@ h4 {
 
 div.slogan {
   color:gray;
-  font-size: 16px;
-  font-family: Terminus;
+  font-size: 14px;
+  font-family: Profont,Terminus, Monospace;
 
   font-weight:700;
   letter-spacing:-1px;
@@ -278,8 +283,9 @@ div.slogan div {
   padding:0;
   text-align:left;
   width:500px;
-  font-family: DroidMono, Terminus;
-  font-size: 10px;
+  font-family: GB, Verdana, Monospace;
+  /*font-family: 'lucida grande','lucida sans unicode',Verdana,Tahoma,Arial,sans-serif;*/
+  font-size: 12px;
 }
 
 #contentalt {
@@ -381,3 +387,4 @@ div.slogan div {
   margin:6px 18px 2px 5px;
   padding:2px;
 }
+

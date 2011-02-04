@@ -1,0 +1,57 @@
+---
+layout: post
+title: "use several GTK themes simultaneously"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 04 February 2011
+
+<p>
+I recently switched from Vimperator to Pentadactyl and it was relatively smooth transition. The only thing that annoys me is that, contrary to Vimperator, Pentadactyl uses the GTK theme for the statusline.
+</p>
+<p>
+The only places where I use GTK is the 'Save As'-dialog in firefox, and now, the statusline in Pentadactyl. When I'm about to save files, I want to be able to see where I save them, and I prefer the standard Crux theme here. I do not, however, want a constant white, thick, blending border down my firefox.
+</p>
+
+Luckily for me, this was an easy fix; a simple wrapper around firefox:
+
+{%highlight bash%}
+
+#!/bin/sh
+GTK2_RC_FILES=$HOME/configs/gtkrc-firefox /usr/bin/firefox
+
+{%endhighlight%}
+
+The special firefox gtkrc looks like this:
+
+{%highlight bash%}
+gtk-theme-name="termGTK"
+gtk-icon-theme-name="Echo"
+gtk-font-name="MonteCarlo Medium 9"
+gtk-cursor-theme-size=0
+gtk-toolbar-style=GTK_TOOLBAR_ICONS
+gtk-toolbar-icon-size=GTK_ICON_SIZE_SMALL_TOOLBAR
+gtk-button-images=0
+gtk-menu-images=1
+gtk-enable-event-sounds=0
+gtk-enable-input-feedback-sounds=0
+{%endhighlight%}
+
+And the regular $HOME/.gtkrc-2.0 like so:
+
+{%highlight bash%}
+gtk-theme-name="Crux"
+gtk-icon-theme-name="smokikon"
+gtk-font-name="MonteCarlo Medium 6"
+gtk-cursor-theme-size=0
+gtk-toolbar-style=GTK_TOOLBAR_TEXT
+gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
+gtk-button-images=0
+gtk-menu-images=0
+gtk-enable-event-sounds=1
+gtk-enable-input-feedback-sounds=1
+include "/home/scp1/.gtkrc-2.0.mine"
+{%endhighlight%}
+
+Make sure the script is <strong>before</strong> the 'real' firefox in your PATH.

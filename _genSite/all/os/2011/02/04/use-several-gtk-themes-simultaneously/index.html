@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>Net::japh.se</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="grey">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> ?
+      <a href="/os"   class="green">os(linux,unix)</a> :
+      <a href="/code" class="orange">hacks(code)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2>use several <span class="caps">GTK</span> themes simultaneously</h2>
+<p class="publish_date">04 February 2011</p>
+<p>
+<p>I recently switched from Vimperator to Pentadactyl and it was relatively smooth transition. The only thing that annoys me is that, contrary to Vimperator, Pentadactyl uses the <span class="caps">GTK</span> theme for the statusline.</p>
+</p>
+<p>
+<p>The only places where I use <span class="caps">GTK</span> is the &#8216;Save As&#8217;-dialog in firefox, and now, the statusline in Pentadactyl. When I&#8217;m about to save files, I want to be able to see where I save them, and I prefer the standard Crux theme here. I do not, however, want a constant white, thick, blending border down my firefox.</p>
+</p>
+<p>Luckily for me, this was an easy fix; a simple wrapper around firefox:</p>
+<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
+<span class="nv">GTK2_RC_FILES</span><span class="o">=</span><span class="nv">$HOME</span>/configs/gtkrc-firefox /usr/bin/firefox
+</code></pre>
+</div><p>The special firefox gtkrc looks like this:</p>
+<div class="highlight"><pre><code class="bash">gtk-theme-name<span class="o">=</span><span class="s2">&quot;termGTK&quot;</span>
+gtk-icon-theme-name<span class="o">=</span><span class="s2">&quot;Echo&quot;</span>
+gtk-font-name<span class="o">=</span><span class="s2">&quot;MonteCarlo Medium 9&quot;</span>
+gtk-cursor-theme-size<span class="o">=</span>0
+gtk-toolbar-style<span class="o">=</span>GTK_TOOLBAR_ICONS
+gtk-toolbar-icon-size<span class="o">=</span>GTK_ICON_SIZE_SMALL_TOOLBAR
+gtk-button-images<span class="o">=</span>0
+gtk-menu-images<span class="o">=</span>1
+gtk-enable-event-sounds<span class="o">=</span>0
+gtk-enable-input-feedback-sounds<span class="o">=</span>0
+</code></pre>
+</div><p>And the regular $<span class="caps">HOME</span>/.gtkrc-2.0 like so:</p>
+<div class="highlight"><pre><code class="bash">gtk-theme-name<span class="o">=</span><span class="s2">&quot;Crux&quot;</span>
+gtk-icon-theme-name<span class="o">=</span><span class="s2">&quot;smokikon&quot;</span>
+gtk-font-name<span class="o">=</span><span class="s2">&quot;MonteCarlo Medium 6&quot;</span>
+gtk-cursor-theme-size<span class="o">=</span>0
+gtk-toolbar-style<span class="o">=</span>GTK_TOOLBAR_TEXT
+gtk-toolbar-icon-size<span class="o">=</span>GTK_ICON_SIZE_LARGE_TOOLBAR
+gtk-button-images<span class="o">=</span>0
+gtk-menu-images<span class="o">=</span>0
+gtk-enable-event-sounds<span class="o">=</span>1
+gtk-enable-input-feedback-sounds<span class="o">=</span>1
+include <span class="s2">&quot;/home/scp1/.gtkrc-2.0.mine&quot;</span>
+</code></pre>
+</div><p>Make sure the script is <strong>before</strong> the &#8216;real&#8217; firefox in your <span class="caps">PATH</span>.</p>
+</div>
+
+
+<div id="related">
+  <h3>Somewhat Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/perl/2011/01/22/re.pl/">re.pl</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2011/01/21/Readline/">Readline</a></li>
+    
+      <li>&raquo; <a href="/all/os/2010/10/04/archlinux-and-perl-5.12/">Archlinux and Perl 5.12</a></li>
+    
+  </ul>
+</div>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
+    <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
+    <a href="http://github.com/trapd00r/ls--">ls++</a> ||
+    <a href="http://github.com/trapd00r/xkcd">xkcd</a> <br>
+
+    <a href="http://search.cpan.org/~woldrich/">CPAN releases</a> ||
+    <a href="http://cpan.japh.se">CPAN mirror</a> ||
+    <!-- <a href="http://cpan.japh.se" class="blue">CPAN mirror</a> || -->
+    <a href="http://github.com/trapd00r.se/">Follow this site</a>
+
+    <p>
+    <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
+    <p>&copy; 2011 <a href="/about.html">Magnus Woldrich</a></p>
+
+  </div>
+</div>
+</body>
