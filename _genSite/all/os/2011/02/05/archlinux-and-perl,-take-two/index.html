@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>Net::japh.se</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="grey">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> ?
+      <a href="/os"   class="green">os(linux,unix)</a> :
+      <a href="/code" class="orange">hacks(code)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2>archlinux and perl, take two</h2>
+<p class="publish_date">05 February 2011</p>
+<p>
+<p>Today I had <a href=" http://aur.archlinux.org/packages.php?ID=39032"> another user</a> reporting issues where my packages wouldn&#8217;t install the executables somewhere in the users $<span class="caps">PATH</span>.<br />
+I&#8217;ve <a href="http://japh.se/all/os/2010/10/04/archlinux-and-perl-5.12/">written</a> about this issue before, and I&#8217;ve also <a href="https://bugs.archlinux.org/task/22197">created a ticket</a> on the bug tracker,  along with a possible solution.</p>
+</p>
+<p>I haven&#8217;t heard anything from the guys responsible yet, but things have changed, yet again.<br />
+This is how the <strong>/etc/profile.d/perlbin.sh</strong> script looks now:</p>
+<div class="highlight"><pre><code class="bash"><span class="c"># Set path to perl scriptdirs if they exist</span>
+<span class="c"># https://wiki.archlinux.org/index.php/Perl_Policy#Binaries_and_Scripts</span>
+<span class="c"># Added /usr/bin/*_perl dirs for scripts</span>
+<span class="c"># Remove /usr/lib/perl5/*_perl/bin in next release</span>
+
+<span class="o">[</span> -d /usr/bin/site_perl <span class="o">]</span> <span class="o">&amp;&amp;</span>
+    <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/bin/site_perl
+<span class="o">[</span> -d /usr/lib/perl5/site_perl/bin <span class="o">]</span> <span class="o">&amp;&amp;</span>
+    <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/lib/perl5/site_perl/bin
+
+<span class="o">[</span> -d /usr/bin/vendor_perl <span class="o">]</span> <span class="o">&amp;&amp;</span>
+    <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/bin/vendor_perl
+<span class="o">[</span> -d /usr/lib/perl5/vendor_perl/bin <span class="o">]</span> <span class="o">&amp;&amp;</span>
+    <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/lib/perl5/vendor_perl/bin
+
+<span class="o">[</span> -d /usr/bin/core_perl <span class="o">]</span> <span class="o">&amp;&amp;</span>
+    <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/bin/core_perl
+
+<span class="nb">export </span>PATH
+
+<span class="c"># If you have modules in non-standard directories you can add them here.</span>
+<span class="c">#export PERLLIB=dir1:dir2</span>
+</code></pre>
+</div><p>So to make things clear; the paths went from (the working) <i>/usr/bin/perlbin</i> to <i>/usr/lib/perl5/vendor_perl/bin</i> and back to <i>/usr/bin/perlbin</i>. Keep in mind that this script still fails for a lot of people <strong>since the directories <span class="caps">DOES</span> <span class="caps">NOT</span> <span class="caps">EXIST</span></strong>.<br />
+The conversation that led up to this can be read <a href="https://bugs.archlinux.org/task/13808">in this bug report</a>.</p>
+</p>
+<p>
+<p>A &#8216;solution&#8217;, as pointed out in the bug report for the <strong>pickyfont</strong> package, would be to create a symlink from /usr/bin/vendor_perl/pickyfont to /usr/bin/pickyfont. But this is not a solution. A solution would be to replace this shitty non-working script with my patched version that I provided in the bug report.</p>
+<p>Having to provide support for issues that I can&#8217;t do something about is frustrating. That&#8217;s why I wrote that other post. I&#8217;m so fed up with packaging stuff for Archlinux, I&#8217;ll most likely stop and direct users to <a href="http://github.com/trapd00r">the git repository</a> or <a href="http://search.cpan.org/~woldrich/">the <span class="caps">CPAN</span></a>.</p>
+</p>
+<p>
+<p>The <span class="caps">PKGBUILD</span> system sure is nice and easy and fluffy and all that, but it&#8217;s even easier writing a simple Makefile and uploading the stuff to <span class="caps">CPAN</span>.</p>
+</p>
+<p>But then again, if you use Archlinux, the executebles wont be found in your <span class="caps">PATH</span>&#8230;</p>
+</div>
+
+
+<div id="related">
+  <h3>Somewhat Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/os/2010/10/04/archlinux-and-perl-5.12/">Archlinux and Perl 5.12</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2011/01/22/re.pl/">re.pl</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2011/01/21/Readline/">Readline</a></li>
+    
+  </ul>
+</div>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
+    <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
+    <a href="http://github.com/trapd00r/ls--">ls++</a> ||
+    <a href="http://github.com/trapd00r/xkcd">xkcd</a> <br>
+
+    <a href="http://search.cpan.org/~woldrich/">CPAN releases</a> ||
+    <a href="http://cpan.japh.se">CPAN mirror</a> ||
+    <!-- <a href="http://cpan.japh.se" class="blue">CPAN mirror</a> || -->
+    <a href="http://github.com/trapd00r/trapd00r.se/">Follow this site</a>
+
+    <p>
+    <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
+    <p>&copy; 2011 <a href="/about.html">Magnus Woldrich</a></p>
+
+  </div>
+</div>
+</body>
