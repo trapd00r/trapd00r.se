@@ -1,0 +1,134 @@
+---
+layout: post
+title: "vim-bindings in all applications"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 25 April 2011
+
+<p>
+Here I'll describe how I use vi or vim keymaps in every application that I use.
+<p>
+
+h2. Xorg
+
+<p>
+I'd recommend mapping the useless Caps Lock key to ESC using xmodmap. This will affect all applications in X, including Vim. This is how it might be done using xmodmap:
+
+{%highlight bash%}
+xmodmap -e 'clear Lock' -e 'keycode 0x42' = Escape
+{%endhighlight%}
+
+</p>
+
+h2. Virtual Console (TTY)
+
+<p>
+Having Caps Lock mapped to ESC outside of X is a tiny bit trickier. Make sure you're in a TTY when you do this, or else you'll get false results!
+
+{%highlight bash%}
+# Let's find out what keycodes map to the keys we want to remap
+dumpkeys -l | grep -P 'escape|caps'
+
+  Caps Lock       58
+  Escape           1
+
+{%endhighlight%}
+
+Put our new definition in a file called */usr/local/share/kbd/keymaps/caps_to_esc* and use the **loadkeys** application to load our new values:
+
+
+{%highlight bash%}
+
+echo 'keycode 58 = 1' >> /usr/local/share/kbd/caps_to_esc
+loadkeys -q /usr/local/share/kbd/caps_to_esc
+
+{%endhighlight%}
+
+</p>
+
+h2. Shell
+
+h3. Bash and readline
+
+<p>
+Bash uses readline which supports a vi keymap. In bash you can enable it by issuing:
+
+{%highlight bash%}
+set -o vi
+{%endhighlight%}
+
+You can activate it for other applications using readline by placing this in your $HOME/.inputrc:
+
+{%highlight bash%}
+set editing-mode vi
+set keymap vi-insert
+{%endhighlight%}
+
+See readline(3) for a full list of options. <a href="https://github.com/trapd00r/configs/blob/master/inputrc">Here's my setup</a>.
+</p>
+
+h3. Zsh
+
+<p>
+Zsh does not use readline, but it's own command line editor called **zle**. You can still place this in your shell resource files though:
+
+{%highlight bash%}
+set -o vi
+{%endhighlight%}
+
+Additionally, you can use the zle function **bindkey** to manipulate your keymaps. See
+
+{%highlight bash%}
+zle -l
+{%endhighlight%}
+
+for a full list of keymaps.
+</p>
+
+h2. Git
+
+<p>
+<a href="https://git.wiki.kernel.org/index.php/Tig">tig</a> is a nice ncurses git repository browser with vim movement keys being the defaults.
+</p>
+
+h2. Irssi
+
+<p>
+Irssi was for a long time the only application where I had to use the cursor keys and other evilness. Along came <a href="https://github.com/shabble">Shabble</a> and saved the day with his wonderful <a href="https://github.com/shabble/irssi-scripts/tree/master/vim-mode">vim-mode</a> plugin. Make sure to check out his <a href="https://github.com/shabble/irssi-scripts">other scripts</a> as well, there are some really nifty stuff in there.
+</p>
+
+h2. PDF (apvlv)
+
+<p>
+For PDF viewing I use <a href="https://code.google.com/p/apvlv/">apvlv</a> which is the least annoying PDF viewer I know of and it 'works just like Vim'.
+</p>
+
+h2. Firefox
+
+<p>
+I've for a long time used the Firefox addon Vimperator, and now I'm using the fork called <a href="http://dactyl.sourceforge.net/pentadactyl/">Pentadactyl</a>. If you're a Vim user, you really can not browse the web without this.
+</p>
+
+h2. Music (MPD)
+
+h3. Pimpd2
+
+<p>
+I've written a command-line based MPD client called <a href="https://github.com/trapd00r/pimpd2">pimpd2</a>. It also features a built-in interactive shell, using readline, so the vim keymap works there.
+</p>
+
+h3. ncmpcpp
+
+<p>
+
+<a href="http://unkart.ovh.org/ncmpcpp/">ncmpcpp</a> is a client built using C++ and ncurses. It features vim-like bindings fresh out of the box.
+
+</p>
+
+h2. Video (mplayer)
+
+<p>
+The obvious choice for video is <a href="http://www.mplayerhq.hu">mplayer</a> which is highly configurable. My input configuration for it can be found <a href="https://github.com/trapd00r/configs/blob/master/mplayer/input.conf">here</a>.
+</p>

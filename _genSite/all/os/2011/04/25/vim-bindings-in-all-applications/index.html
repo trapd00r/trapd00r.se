@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"  />
+<meta name="description" content="Perl and Unix in 2010" />
+<meta name="keywords" content="perl,code,linux,software,development" />
+<meta name="author" content="Magnus Woldrich" />
+
+<link rel="stylesheet" type="text/css" href="/css/default.css" />
+<link rel="stylesheet" type="text/css" href="/css/pygments/neverland.css" />
+
+<!-- TODO: Figure out rss feed -->
+<title>Net::japh.se</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="header">
+      <p id="toplinks">
+
+      </p>
+
+      <h1><a href="/"><div id="logo"></div></span>trap<span class="mousewings">(</span><span class="fade">d00r</span><span class="mousewings">)</span><span class="grey">;</span></a></h1>
+
+    <div class="slogan">
+      <a href="/perl" class="pink">perl(posts)</a> ?
+      <a href="/os"   class="green">os(linux,unix)</a> :
+      <a href="/code" class="orange">hacks(code)</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <div id="post">
+<h2>vim-bindings in all applications</h2>
+<p class="publish_date">25 April 2011</p>
+<p>
+<p>Here I&#8217;ll describe how I use vi or vim keymaps in every application that I use.<br />
+<p></p>
+<h2>Xorg</h2>
+<p>
+<p>I&#8217;d recommend mapping the useless Caps Lock key to <span class="caps">ESC</span> using xmodmap. This will affect all applications in X, including Vim. This is how it might be done using xmodmap:</p>
+<div class="highlight"><pre><code class="bash">xmodmap -e <span class="s1">&#39;clear Lock&#39;</span> -e <span class="s1">&#39;keycode 0x42&#39;</span> <span class="o">=</span> Escape
+</code></pre>
+</div></p>
+<h2>Virtual Console (<span class="caps">TTY</span>)</h2>
+<p>
+<p>Having Caps Lock mapped to <span class="caps">ESC</span> outside of X is a tiny bit trickier. Make sure you&#8217;re in a <span class="caps">TTY</span> when you do this, or else you&#8217;ll get false results!</p>
+<div class="highlight"><pre><code class="bash"><span class="c"># Let&#39;s find out what keycodes map to the keys we want to remap</span>
+dumpkeys -l | grep -P <span class="s1">&#39;escape|caps&#39;</span>
+
+  Caps Lock       58
+  Escape           1
+</code></pre>
+</div><p>Put our new definition in a file called <strong>/usr/local/share/kbd/keymaps/caps_to_esc</strong> and use the <b>loadkeys</b> application to load our new values:</p>
+<div class="highlight"><pre><code class="bash"><span class="nb">echo</span> <span class="s1">&#39;keycode 58 = 1&#39;</span> &gt;&gt; /usr/local/share/kbd/caps_to_esc
+loadkeys -q /usr/local/share/kbd/caps_to_esc
+</code></pre>
+</div></p>
+<h2>Shell</h2>
+<h3>Bash and readline</h3>
+<p>
+<p>Bash uses readline which supports a vi keymap. In bash you can enable it by issuing:</p>
+<div class="highlight"><pre><code class="bash"><span class="nb">set</span> -o vi
+</code></pre>
+</div><p>You can activate it for other applications using readline by placing this in your $<span class="caps">HOME</span>/.inputrc:</p>
+<div class="highlight"><pre><code class="bash"><span class="nb">set </span>editing-mode vi
+<span class="nb">set </span>keymap vi-insert
+</code></pre>
+</div><p>See readline(3) for a full list of options. <a href="https://github.com/trapd00r/configs/blob/master/inputrc">Here&#8217;s my setup</a>.</p>
+</p>
+<h3>Zsh</h3>
+<p>
+<p>Zsh does not use readline, but it&#8217;s own command line editor called <b>zle</b>. You can still place this in your shell resource files though:</p>
+<div class="highlight"><pre><code class="bash"><span class="nb">set</span> -o vi
+</code></pre>
+</div><p>Additionally, you can use the zle function <b>bindkey</b> to manipulate your keymaps. See</p>
+<div class="highlight"><pre><code class="bash">zle -l
+</code></pre>
+</div><p>for a full list of keymaps.</p>
+</p>
+<h2>Git</h2>
+<p>
+<p><a href="https://git.wiki.kernel.org/index.php/Tig">tig</a> is a nice ncurses git repository browser with vim movement keys being the defaults.</p>
+</p>
+<h2>Irssi</h2>
+<p>
+<p>Irssi was for a long time the only application where I had to use the cursor keys and other evilness. Along came <a href="https://github.com/shabble">Shabble</a> and saved the day with his wonderful <a href="https://github.com/shabble/irssi-scripts/tree/master/vim-mode">vim-mode</a> plugin. Make sure to check out his <a href="https://github.com/shabble/irssi-scripts">other scripts</a> as well, there are some really nifty stuff in there.</p>
+</p>
+<h2><span class="caps">PDF</span> (apvlv)</h2>
+<p>
+<p>For <span class="caps">PDF</span> viewing I use <a href="https://code.google.com/p/apvlv/">apvlv</a> which is the least annoying <span class="caps">PDF</span> viewer I know of and it &#8216;works just like Vim&#8217;.</p>
+</p>
+<h2>Firefox</h2>
+<p>
+<p>I&#8217;ve for a long time used the Firefox addon Vimperator, and now I&#8217;m using the fork called <a href="http://dactyl.sourceforge.net/pentadactyl/">Pentadactyl</a>. If you&#8217;re a Vim user, you really can not browse the web without this.</p>
+</p>
+<h2>Music (<span class="caps">MPD</span>)</h2>
+<h3>Pimpd2</h3>
+<p>
+<p>I&#8217;ve written a command-line based <span class="caps">MPD</span> client called <a href="https://github.com/trapd00r/pimpd2">pimpd2</a>. It also features a built-in interactive shell, using readline, so the vim keymap works there.</p>
+</p>
+<h3>ncmpcpp</h3>
+<p>
+<p><a href="http://unkart.ovh.org/ncmpcpp/">ncmpcpp</a> is a client built using C++ and ncurses. It features vim-like bindings fresh out of the box.</p>
+</p>
+<h2>Video (mplayer)</h2>
+<p>
+<p>The obvious choice for video is <a href="http://www.mplayerhq.hu">mplayer</a> which is highly configurable. My input configuration for it can be found <a href="https://github.com/trapd00r/configs/blob/master/mplayer/input.conf">here</a>.</p>
+</p>
+</div>
+
+
+<div id="related">
+  <h3>Somewhat Related Posts</h3>
+  <ul class="posts">
+    
+      <li>&raquo; <a href="/all/perl/2011/01/22/re.pl/">re.pl</a></li>
+    
+      <li>&raquo; <a href="/all/perl/2011/01/21/Readline/">Readline</a></li>
+    
+      <li>&raquo; <a href="/all/code/2010/07/12/remote-controlled-mplayer-daemon/">Remote Mplayer Client/Daemon</a></li>
+    
+  </ul>
+</div>
+
+  </div>
+
+  <div id="footer">
+    <a href="http://github.com/trapd00r">github</a> ||
+    <a href="http://github.com/trapd00r/pimpd2">pimpd2</a> ||
+    <a href="http://github.com/trapd00r/rmcd">rmcd</a> ||
+    <a href="http://github.com/trapd00r/clipbored">clipbored</a> ||
+    <a href="http://github.com/trapd00r/pickyfont">pickyfont</a> ||
+    <a href="http://github.com/trapd00r/colorcoke">colorcoke</a> ||
+    <a href="http://github.com/trapd00r/ls--">ls++</a> ||
+    <a href="http://github.com/trapd00r/xkcd">xkcd</a> <br>
+
+    <a href="http://search.cpan.org/~woldrich/">CPAN releases</a> ||
+    <a href="http://cpan.japh.se">CPAN mirror</a> ||
+    <!-- <a href="http://cpan.japh.se" class="blue">CPAN mirror</a> || -->
+    <a href="http://github.com/trapd00r/trapd00r.se/">Follow this site</a>
+
+    <p>
+    <span class="mousewings"><strong>Mail</strong></span>:<span class="grey"> magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>xmpp</strong></span>: <span class="grey">magnus</span><span class="mousewings">@trapd00r.se</span><span class="mousewings"> // <strong>irc</strong></span>: <span class="grey">scp1</span><span class="mousewings">@freenode</span>
+    <p>&copy; 2011 <a href="/about.html">Magnus Woldrich</a></p>
+
+  </div>
+</div>
+</body>
