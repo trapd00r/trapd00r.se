@@ -1,0 +1,30 @@
+---
+layout: post
+title: "dotshare"
+---
+
+h2. {{ page.title }}
+
+p(publish_date). 17 July 2011
+
+<p>
+
+h2. <a href="http://dotshare.it">Dotshare</a>
+
+<p>
+About a month ago I got an email from the fellow critter dipiwee, telling me he was working on a project that I might be interested in. I'm always interested in new projects so he invited me to the #dotshare channel on freenode. When he told me about the concept - a place to share dotfiles and dotfiles only - I was skeptic. Some of you might remember the old dotfiles.org site which was a mess. Furthermore, what's the point of this with stuff like github where people share their configuration files *and* their code?
+</p>
+
+<p>
+When the site opened up for beta I had a look though. And this wasn't what I expected; those of you who knows me knows that I hate this whole web2.0 thing where focus lies on design instead of content. But, the site looked great and everything is very well integrated. There's even a bunch of 'social' features; you can watch people and be notified whenever she uploads something.
+</p>
+
+h3. API
+
+<p>
+The initial problem I saw with sites like this is that uploaded stuff will get old and outdated. That's not the fact with for example github (assuming you push your changes). So how do we make sure that we always keep the most up to date files on sharedot?
+</p>
+
+<p>
+Let's assume that you keep your dotfiles in a git repository. Earlier today you uploaded your vim configuration to sharedot, and now you've realized that something was broken in it. Instead of having to re-upload file by file manually, we can use git hooks, or more specifically a git **post-commit** hook. Having an API would make this easier and a lot less hackish. <a href="http://dotshare.it/~anomareh/">Anomareh</a> is working on it.
+</p>
